@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 
 import torch
+from adapter_io import load_state_dict_flexible
 from torch.utils.data import Dataset, DataLoader
 
 from transformers import AutoTokenizer
@@ -13,11 +14,11 @@ from transformers import AutoTokenizer
 from scipy import stats
 from sklearn.metrics import r2_score, mean_squared_error
 
-# Model class comes from the trainer that PRODUCED these checkpoints
-# (261004_Lora_bbs_dg): masked-mean pooling -> DeltaGFusionHead. That head is an
-# MLP(hidden[+1] -> 128 -> ReLU -> 1), not the per-residue Linear of the Track A
-# trainer, so the Track A predict script cannot load these weights.
-from train_esmc_lora_dg import (
+# Model class comes from the trainer that produced these checkpoints
+# (train_esmc_lora_mlp_head.py): masked-mean pooling -> DeltaGFusionHead, an
+# MLP(hidden[+1] -> 128 -> ReLU -> 1). Checkpoints with the per-residue linear head
+# (ESMC-Nb-*) are loaded by predict_esmc_residue.py instead.
+from train_esmc_lora_mlp_head import (
     EsmCLoRAResidueMeanRegressor,
     infer_esmc_hidden_size,
 )
@@ -284,7 +285,7 @@ def load_model_from_checkpoint(
         use_deltag=use_deltag,
     )
 
-    model.load_state_dict(sd, strict=True)
+    load_state_dict_flexible(model, sd, adapter_only=bool(ckpt.get("adapter_only", False)))
     print("  head params:", sum(p.numel() for p in model.regression_head.parameters()))
     # Cast on CPU first, then move: going .to(device) in fp32 and casting afterwards would
     # briefly need the full fp32 footprint on the GPU, which is the thing we are avoiding.

@@ -354,9 +354,9 @@ class SaProtLoRAResidueMeanRegressor(nn.Module):
 
         self.esm = get_peft_model(self.esm, peft_config)
 
-        # Condition B (matching the ESMC-6B run): masked-mean pool first, then an
-        # MLP head. The original SaProt head was a per-residue Linear(H,1) followed
-        # by the mean, which is condition A -- mathematically a mean then a linear.
+        # masked-mean pool first, then an MLP head (as for ESMC-MonoYield). A
+        # per-residue Linear(H,1) followed by the mean would be mathematically a
+        # mean then a linear.
         # Named "regression_head" so make_optimizer's name-based routing finds it.
         self.hidden_size = hidden_size
         self.architecture = architecture
@@ -1104,7 +1104,7 @@ def main():
     parser.add_argument("--num_workers", type=int, default=2)
 
     parser.add_argument("--architecture", default="mean_mlp128", choices=list(ph.ARCHITECTURES),
-                        help="prediction head / pooling variant, shared with the ESMC ablation")
+                        help="prediction head / pooling variant, shared with the ESMC trainer")
     parser.add_argument("--lora_r", type=int, default=4)
     parser.add_argument("--lora_alpha", type=int, default=8)
     parser.add_argument("--lora_dropout", type=float, default=0.15)

@@ -1,19 +1,14 @@
-"""Prediction-head / pooling variants for the ESM-C 6B LoRA ablation.
+"""Prediction-head / pooling variants for the ESM-C / SaProt LoRA regressors (all deltaG-free).  H = model hidden size.
 
-Five architectures, all deltaG-free.  H = model hidden size.
+    mean_linear          masked-mean over residues -> Linear(H, 1)
+    mean_mlp128          masked-mean -> Linear(H,128) -> ReLU -> Linear(128,1)        (head of ESMC-MonoYield and SaProt LoRA)
+    residue_mlp128_mean  per-residue Linear(H,128) -> ReLU -> Linear(128,1), then masked mean of the scalars
+    attention_linear     attention pooling -> Linear(H, 1)
+    attention_mlp128     attention pooling -> Linear(H,128) -> ReLU -> Linear(128,1)
 
-    mean_linear          A  masked-mean over residues -> Linear(H, 1)
-    mean_mlp128          B  masked-mean -> Linear(H,128) -> ReLU -> Linear(128,1)
-    residue_mlp128_mean  C  per-residue Linear(H,128) -> ReLU -> Linear(128,1),
-                            then masked mean of the scalars
-    attention_linear     D  attention pooling -> Linear(H, 1)
-    attention_mlp128     E  attention pooling -> Linear(H,128) -> ReLU -> Linear(128,1)
-
-B and C share the head shape and parameter count; they differ only in whether
-the nonlinearity is applied before or after pooling.  The per-residue MLP in C
-is shared across all residues.  A is mathematically identical to a per-residue
-Linear followed by a mean, because an affine map commutes with averaging --
-that is the head used by the existing Track A baseline.
+mean_mlp128 and residue_mlp128_mean share the head shape and parameter count; they differ only in whether
+the nonlinearity is applied before or after pooling. mean_linear is mathematically identical to a per-residue
+Linear followed by a mean, because an affine map commutes with averaging (the ESMC-Nb-* models use this).
 
 No Dropout, no LayerNorm anywhere, by design.
 """

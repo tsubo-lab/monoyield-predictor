@@ -343,11 +343,13 @@ class EsmCLoRAResidueMeanRegressor(nn.Module):
         lora_dropout=0.05,
         hidden_size=1152,
         target_modules=["out_proj"],
+        model_revision=None,
     ):
         super().__init__()
 
         self.esm = AutoModel.from_pretrained(
             model_name,
+            revision=model_revision,
             trust_remote_code=True,
         )
 

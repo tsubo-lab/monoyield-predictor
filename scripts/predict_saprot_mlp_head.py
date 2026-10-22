@@ -15,6 +15,7 @@ import numpy as np
 import pandas as pd
 
 import torch
+from adapter_io import load_state_dict_flexible
 from torch.utils.data import Dataset, DataLoader
 
 from transformers import EsmTokenizer
@@ -22,9 +23,8 @@ from transformers import EsmTokenizer
 from scipy import stats
 from sklearn.metrics import r2_score, mean_squared_error
 
-# Model class comes from the trainer that PRODUCED these checkpoints
-# (261004_Lora_bbs_dg): masked-mean pooling -> PoolingHead. The Track A trainer's
-# head is a per-residue Linear, so its predictor cannot load these weights.
+# Model class comes from the trainer that produced these checkpoints
+# (train_saprot_lora_mlp_head.py): masked-mean pooling -> PoolingHead.
 from train_saprot_lora_mlp_head import (
     SaProtLoRAResidueMeanRegressor,
 )
@@ -223,9 +223,8 @@ def load_model_from_checkpoint(checkpoint_path, device, fallback_model_name=None
     architecture = saved_args.get("architecture")
     if architecture is None:
         raise ValueError(
-            "checkpoint has no 'architecture' in args -- it was produced by the "
-            "Track A trainer, whose per-residue Linear head this predictor cannot "
-            "reconstruct. Use predict_saprot_residue_pinned.py for those."
+            "checkpoint has no 'architecture' in args -- it was not produced by "
+            "train_saprot_lora_mlp_head.py, so this predictor cannot reconstruct its head."
         )
     print("  architecture:", architecture,
           "| mlp_width:", saved_args.get("mlp_width"),
@@ -242,7 +241,7 @@ def load_model_from_checkpoint(checkpoint_path, device, fallback_model_name=None
         architecture=architecture,
     )
 
-    model.load_state_dict(ckpt["model_state_dict"], strict=True)
+    load_state_dict_flexible(model, ckpt["model_state_dict"], adapter_only=bool(ckpt.get("adapter_only", False)))
     print("  head params:", sum(p.numel() for p in model.regression_head.parameters()))
 
     # Cast on CPU, then move. Moving in fp32 first would need the full fp32 footprint

@@ -373,8 +373,8 @@ class EsmCLoRAResidueMeanRegressor(nn.Module):
 
         self.esm = get_peft_model(self.esm, peft_config)
 
-        # Condition C: masked-mean pool first, then an MLP head that also
-        # consumes the standardized deltaG scalar.
+        # masked-mean pool first, then an MLP head (optionally also consuming
+        # the standardized deltaG scalar; not used for the released models).
         self.regression_head = dgf.DeltaGFusionHead(
             hidden_size, deltag_mean, deltag_std, use_deltag=use_deltag)
 
@@ -1127,11 +1127,11 @@ def main():
     parser.add_argument("--bbs_col", default=None,
                         help="optional; omit for splits without a backbone column")
     parser.add_argument("--wt_rep_col", default=None)
-    parser.add_argument("--deltag_csv", required=True,
-                        help="CSV with name,deltaG_pred")
+    parser.add_argument("--deltag_csv", default=None,
+                        help="CSV with name,deltaG_pred (not needed with --no_deltag)")
     parser.add_argument("--deltag_col", default="deltaG_pred")
     parser.add_argument("--no_deltag", action="store_true",
-                        help="condition B: same MLP head, deltaG input removed")
+                        help="same MLP head, deltaG input removed (used for ESMC-MonoYield)")
 
     parser.add_argument("--y_col", default="monomer_log_mgL")
     parser.add_argument("--wt_name_col", default="wt_name")
@@ -1305,7 +1305,7 @@ def main():
 
     if args.no_deltag:
         deltag_mapping = None
-        print("[deltaG] DISABLED (condition B: MLP head without the deltaG input)")
+        print("[deltaG] DISABLED (MLP head without the deltaG input)")
     else:
         deltag_mapping = dgf.load_deltag(args.deltag_csv, args.name_col, args.deltag_col)
         print(f"[deltaG] loaded {len(deltag_mapping)} entries from {args.deltag_csv}")

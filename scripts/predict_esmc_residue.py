@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 
 import torch
+from adapter_io import load_state_dict_flexible
 from torch.utils.data import Dataset, DataLoader
 
 from transformers import AutoTokenizer
@@ -221,6 +222,7 @@ def load_model_from_checkpoint(
     device,
     fallback_model_name=None,
     fallback_hidden_size=None,
+    model_revision=None,
 ):
     ckpt = torch.load(checkpoint_path, map_location=device)
 
@@ -251,9 +253,10 @@ def load_model_from_checkpoint(
         lora_dropout=lora_dropout,
         hidden_size=hidden_size,
         target_modules=["out_proj"],
+        model_revision=model_revision,
     )
 
-    model.load_state_dict(ckpt["model_state_dict"])
+    load_state_dict_flexible(model, ckpt["model_state_dict"], adapter_only=bool(ckpt.get("adapter_only", False)))
     model.to(device)
 
     return model, saved_args
@@ -288,6 +291,8 @@ def main():
     parser.add_argument("--y_col", default=None)
 
     parser.add_argument("--model_name", default=None)
+    parser.add_argument("--model_revision", default=None,
+                        help="Pin the HF revision of the base model (needed: the current `main` of biohub/ESMC-6B cannot be loaded by these scripts).")
     parser.add_argument("--hidden_size", type=int, default=None)
 
     parser.add_argument("--max_length", type=int, default=512)
@@ -328,6 +333,7 @@ def main():
 
     tokenizer = AutoTokenizer.from_pretrained(
         tokenizer_model_name,
+        revision=args.model_revision,
         trust_remote_code=True,
     )
 
@@ -368,6 +374,7 @@ def main():
             device=device,
             fallback_model_name=args.model_name,
             fallback_hidden_size=args.hidden_size,
+            model_revision=args.model_revision,
         )
 
         names, preds, labels = predict_loader(

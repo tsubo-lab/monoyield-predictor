@@ -72,8 +72,8 @@ def collate_deltag(batch):
 class DeltaGFusionHead(nn.Module):
     """Accept raw deltaG; normalization travels with the model state_dict.
 
-    use_deltag=False gives condition B: the identical MLP head with the deltaG
-    input removed, so the head-capacity change can be measured on its own.
+    use_deltag=False gives the identical MLP head with the deltaG input removed
+    (the setting of the released ESMC-MonoYield model).
     """
     def __init__(self, hidden_size, mean, std, use_deltag=True):
         super().__init__()

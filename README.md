@@ -11,11 +11,10 @@ Sequence-based predictors of the **monomeric expression yield in *E. coli*** (lo
 
 | name in the paper | base model | head | trained on | input | output | script |
 |---|---|---|---|---|---|---|
-| **ESMC-MonoYield** | ESMC-6B (`biohub/ESMC-6B`) + LoRA | masked-mean pooling -> MLP (hidden -> 128 -> ReLU -> 1) ("head B") | de novo + DMS, monomer log10 mg/L, 5-fold (mmseq cluster groups) | amino-acid sequence | log10 monomer yield (mg/L) | `scripts/predict_esmc_mlp_head.py` |
+| **ESMC-MonoYield** | ESMC-6B (`biohub/ESMC-6B`) + LoRA | masked-mean pooling -> MLP (hidden -> 128 -> ReLU -> 1) | de novo + DMS, monomer log10 mg/L, 5-fold (mmseq cluster groups) | amino-acid sequence | log10 monomer yield (mg/L) | `scripts/predict_esmc_mlp_head.py` |
 | **SaProt LoRA** | SaProt 1.3B (`westlake-repl/SaProt_1.3B_AFDB_OMG_NCBI`) + LoRA | same MLP head | same | structure-aware sequence (AA + 3Di, `scripts/prepare_saprot_structure_seqs.py`) | same | `scripts/predict_saprot_mlp_head.py` |
-| **ESMC-Nb-MonoYield** | ESMC-6B + LoRA | per-residue regression, mean-pooled (the "residue-mean" head of `train_esmc_lora_denovo_only_residue_mean_clip.py`; not the MLP head B) | nanobody library (monomer log10 mg/L), 5-fold | nanobody sequence | log10 monomer yield | `scripts/predict_esmc_residue.py` / `predict_nanobody_model_on_denovo.py` |
+| **ESMC-Nb-MonoYield** | ESMC-6B + LoRA | per-residue regression, mean-pooled (`train_esmc_lora_denovo_only_residue_mean_clip.py`) | nanobody library (monomer log10 mg/L), 5-fold | nanobody sequence | log10 monomer yield | `scripts/predict_esmc_residue.py` / `predict_nanobody_model_on_denovo.py` |
 | **ESMC-Nb-MDRatio** | ESMC-6B + LoRA | same as above | nanobody library (log10 monomer/dimer ratio) | nanobody sequence | log10 monomer/dimer ratio | same |
-| ESMC-MonoYield_ft | ESMC-MonoYield fine-tuned on the nanobody library | head B | nanobody 5-fold | nanobody sequence | log10 monomer yield | `scripts/predict_esmc_residue_nanobody_ft.py` |
 
 All predictions are 5-fold ensembles (mean of the five fold checkpoints). Targets were clipped to [-1.5, 3.5] (log10 mg/L) for training.
 See `docs/models.md` for the mapping between models, checkpoints, training commands and the paper's figures.
@@ -66,28 +65,25 @@ SaProt needs a structure-derived sequence (AA + 3Di) in the `saprot_seq` column:
 
 ## Training / reproducing the paper
 
-`scripts/train_*.py` and `slurm/*.sh` are the commands used on our SLURM cluster (paths are replaced by `${DATA_ROOT}`;
-adapt GPU/partition lines). Training data (sequence, yield, cluster-based 5-fold split) are provided as source data
-with the paper (see `docs/data.md`): the tables `TableS04` (main library), `TableS07` / `TableS18` (nanobody).
+`run/*.sh` contain the exact training and prediction commands used for the paper (run them from the repository root; ESMC-6B in fp32 needs a GPU with >= 48 GB). Training data are in `data/` (see `docs/data.md`).
 
 | step | script |
 |---|---|
-| ESMC-MonoYield (head B, 5 folds) | `slurm/run_nodg_6b_mmseq30.sh` -> `scripts/train_esmc_lora_dg.py` |
-| SaProt LoRA (head B) | `slurm/run_saprot_B_mlp128_mmseq30.sh` -> `scripts/train_saprot_lora_mlp_head.py` |
-| ESMC-Nb-MonoYield / MDRatio | `slurm/run_6b_all_clip_nanobody_monomer_log.sh`, `..._mono_di_ratio.sh` -> `scripts/train_esmc_lora_denovo_only_residue_mean_clip.py` |
-| nanobody fine-tuning of ESMC-MonoYield | `slurm/run_nanobody_finetune_5fold.sh` -> `scripts/finetune_esmc_lora_nanobody_5fold_from_pt.py` |
-| prediction examples | `slurm/run_predict_*.sh` |
+| ESMC-MonoYield (5 folds) | `run/train_esmc_monoyield.sh` -> `scripts/train_esmc_lora_mlp_head.py` |
+| SaProt LoRA | `run/train_saprot_lora.sh` -> `scripts/train_saprot_lora_mlp_head.py` |
+| ESMC-Nb-MonoYield / MDRatio | `run/train_esmc_nb_monoyield.sh`, `run/train_esmc_nb_mdratio.sh` -> `scripts/train_esmc_lora_denovo_only_residue_mean_clip.py` |
+| prediction examples | `run/predict_cov_binders.sh`, `run/predict_nanobody.sh` |
 
 ## Repository layout
 
 ```
 monoyield-predictor/
 ├── README.md  LICENSE  pyproject.toml  download_weights.sh  .gitignore
-├── scripts/      training and prediction scripts (flat: predict_* import train_esmc_lora_dg.py / pooling_heads.py)
-├── slurm/        example job scripts (cluster specific)
+├── scripts/      training and prediction scripts (flat: predict_* import train_esmc_lora_mlp_head.py / pooling_heads.py)
+├── run/          training / prediction commands used for the paper
+├── data/         training / input csv files (sequences, yields, 5-fold assignment)
 ├── examples/     example inputs with observed values
-├── docs/         models.md, data.md
-└── notebooks/    (planned) minimal prediction notebooks
+└── docs/         models.md, data.md
 ```
 
 ## Citation

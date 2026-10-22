@@ -1,18 +1,23 @@
 # Models, checkpoints and figures
 
-| model | checkpoint dir (on the cluster, not shipped) | paper panels |
-|---|---|---|
-| ESMC-MonoYield | `261004_Lora_bbs_dg/outputs/nodg_6b_mmseq30_merged` (folds 1-5) | Fig. 4c-f, ExtFig. 10-12, Fig. 5j / ExtFig. 14 (applied to nanobodies) |
-| SaProt LoRA | `261004_Lora_bbs_dg/outputs/saprot_B_mlp128_mmseq30` | Fig. 4d,e, ExtFig. 11, 12c |
-| ESMC-Nb-MonoYield | `260623_LoRA/outputs/out_nanobody_monomer` | Fig. 5j, ExtFig. 14 |
-| ESMC-Nb-MDRatio | `260623_LoRA/outputs/out_nanobody_monomer_dimer_ratio` | Fig. 5j |
-| ESMC-MonoYield_ft | `260623_LoRA/outputs/nanobody_ft_5fold` | ExtFig. 14 |
-| linear-head baselines | `260929_LoRA_mmseq30/outputs/{out_6b_mmseq30_merged, saprot_one_stage_..._clip_mmseq30, esm3_..._postnorm_head}` | Fig. 4c, ExtFig. 10c (not part of this repository) |
+Checkpoints are 5-fold ensembles (`group_1 ... group_5/best_model.pt`, adapter-only: LoRA + head, 7-12 MB per fold; the frozen base model is loaded from Hugging Face).
 
+| model | exported weights | paper panels |
+|---|---|---|
+| ESMC-MonoYield | `weights/esmc_monoyield` | Fig. 4c-f, ExtFig. 10-12; applied to nanobodies in ExtFig. 14b-c |
+| SaProt LoRA | `weights/saprot_lora` | Fig. 4d,e, ExtFig. 11, 12c |
+| ESMC-Nb-MonoYield | `weights/esmc_nb_monoyield` | Fig. 5j, ExtFig. 14c |
+| ESMC-Nb-MDRatio | `weights/esmc_nb_mdratio` | Fig. 5j |
+
+The linear-head LoRA baselines of Fig. 4c / ExtFig. 10c are not part of this repository.
 Predictions of all models for every test sequence are in the paper's source data (`TableS15a/b`, `TableS16a/b`).
 
+## Export and check
+`scripts/export_adapter_weights.py` strips a training checkpoint (full fp32 base-model state, ~25 GB for ESMC-6B) to the LoRA + head tensors.
+Predictions from the exported weights were compared with the original checkpoints on example sequences (fold group_1):
+ESMC-MonoYield, ESMC-Nb-MonoYield and ESMC-Nb-MDRatio give identical values (max |diff| = 0); SaProt LoRA reproduces the predictions stored with the paper (max |diff| < 1e-6).
+
 ## Open items before publication
-- Export LoRA adapter + head only from `best_model.pt` (currently the full ~25 GB fp32 state per fold) and deposit (Hugging Face / Zenodo); fill `download_weights.sh`.
-- Check that `predict_*` run end-to-end from the exported weights (the scripts import the model classes from `train_esmc_lora_dg.py`).
-- Decide on a package interface (single `monoyield.predict(seqs)`), optional.
+- Deposit the exported weights (Hugging Face / Zenodo) and fill `download_weights.sh`.
+- Optionally provide a single `monoyield.predict(seqs)` interface.
 - Fill the license holder, citation, and paper title.
