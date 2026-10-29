@@ -56,7 +56,7 @@ weights/
 # ESMC-MonoYield on the example sequences (columns: name, aa_seq)
 python scripts/predict_esmc_mlp_head.py \
     --external_csv examples/example_main_library.csv \
-    --model_dir weights/esmc6b_head_b \
+    --model_dir weights/esmc_monoyield \
     --model_name biohub/ESMC-6B --model_revision 45b0fa5d7fb06faefbd5e3b89bdcef35d564e79a \
     --dtype float32 --batch_size 1 \
     --y_col observed_monomer_log10_mgL \
