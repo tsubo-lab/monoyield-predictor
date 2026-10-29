@@ -25,6 +25,9 @@ from train_esmc_lora_one_stage_abs_wt_delta_residue_mean_clip import (
 # Metrics
 # ============================================================
 
+DTYPES = {"float32": torch.float32, "bfloat16": torch.bfloat16}
+
+
 def safe_pearson(y_true, y_pred):
     y_true = np.asarray(y_true)
     y_pred = np.asarray(y_pred)
@@ -207,7 +210,8 @@ def predict_loader(model, loader, device, tokenizer):
         if "labels" in batch:
             labels.append(batch["labels"].detach().cpu())
 
-    preds = torch.cat(preds).numpy()
+    # numpy has no bfloat16, so bring predictions back to fp32 before converting
+    preds = torch.cat(preds).float().numpy()
 
     if len(labels) > 0:
         labels = torch.cat(labels).numpy()
@@ -223,6 +227,7 @@ def load_model_from_checkpoint(
     fallback_model_name=None,
     fallback_hidden_size=None,
     model_revision=None,
+    dtype=None,
 ):
     ckpt = torch.load(checkpoint_path, map_location=device)
 
@@ -257,6 +262,10 @@ def load_model_from_checkpoint(
     )
 
     load_state_dict_flexible(model, ckpt["model_state_dict"], adapter_only=bool(ckpt.get("adapter_only", False)))
+    # Cast on CPU first, then move: going .to(device) in fp32 and casting afterwards would
+    # briefly need the full fp32 footprint on the GPU, which is the thing we are avoiding.
+    if dtype is not None and dtype != torch.float32:
+        model = model.to(dtype)
     model.to(device)
 
     return model, saved_args
@@ -293,6 +302,10 @@ def main():
     parser.add_argument("--model_name", default=None)
     parser.add_argument("--model_revision", default=None,
                         help="Pin the HF revision of the base model (needed: the current `main` of biohub/ESMC-6B cannot be loaded by these scripts).")
+    parser.add_argument("--dtype", default="float32", choices=["float32", "bfloat16"],
+                        help="Weight dtype for inference. bfloat16 halves the ~25 GB fp32 "
+                             "weight footprint of ESMC-6B so it can fit a 24 GB card; "
+                             "validate against fp32 before trusting it.")
     parser.add_argument("--hidden_size", type=int, default=None)
 
     parser.add_argument("--max_length", type=int, default=512)
@@ -371,6 +384,7 @@ def main():
             fallback_model_name=args.model_name,
             fallback_hidden_size=args.hidden_size,
             model_revision=args.model_revision,
+            dtype=DTYPES[args.dtype],
         )
 
         names, preds, labels = predict_loader(

@@ -27,8 +27,8 @@ pip install torch --index-url https://download.pytorch.org/whl/cu128
 pip install -e .          # transformers==4.57.6, peft==0.19.1, ...
 ```
 
-* **GPU memory.** ESMC-6B in fp32 needs ~25 GB (48 GB-class card, e.g. RTX 6000 Pro). `--dtype bfloat16` halves this
-  (fits a 24 GB card) but should be validated against fp32 before use (bf16 vs fp32 deviations were checked on the paper's data).
+* **GPU memory.** ESMC-6B in fp32 needs ~25 GB (48 GB-class card, e.g. RTX 6000 Pro). `--dtype bfloat16` (available in all prediction scripts) halves this
+  (fits a 24 GB card). On the five example sequences of each model, bf16 and fp32 ensemble predictions differed by at most 0.012 log10 units (r > 0.999); the paper's numbers were produced in fp32, so check bf16 on your own data before relying on it.
 * **Pin the Hugging Face revision.** The `main` revision of `biohub/ESMC-6B` / `ESMC-600M` changed after the models were trained and can break loading.
   Use the training revisions: ESMC-6B `45b0fa5d7fb06faefbd5e3b89bdcef35d564e79a`, ESMC-600M: the revision recorded with the training run (pass `--model_revision`; the full hash still has to be copied here).
 * If the model repository is gated, `export HF_TOKEN=...` (the scripts call `huggingface_hub.login`).
