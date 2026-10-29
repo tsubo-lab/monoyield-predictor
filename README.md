@@ -85,7 +85,7 @@ SaProt needs a structure-derived sequence (AA + 3Di) in the `saprot_seq` column:
 
 ```
 monoyield-predictor/
-├── README.md  LICENSE  pyproject.toml  download_weights.sh  .gitignore
+├── README.md  LICENSE  NOTICE  pyproject.toml  download_weights.sh  .gitignore
 ├── scripts/      training and prediction scripts (flat: predict_* import train_esmc_lora_mlp_head.py / pooling_heads.py)
 ├── run/          training / prediction commands used for the paper
 ├── data/         training / input csv files (sequences, yields, 5-fold assignment)
@@ -99,4 +99,4 @@ monoyield-predictor/
 
 ## License
 
-MIT (see `LICENSE`; copyright holder to be filled). Base models keep their own licenses (ESMC-6B: EvolutionaryScale/Biohub, SaProt: Westlake).
+Apache License 2.0 (see `LICENSE` and `NOTICE`; Copyright 2026 Kotaro Tsuboyama and Selena Setsu). Base models keep their own licenses (ESMC-6B: EvolutionaryScale/Biohub, SaProt: Westlake).
