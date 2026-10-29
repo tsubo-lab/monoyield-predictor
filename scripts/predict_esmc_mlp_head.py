@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 import torch
-from adapter_io import load_state_dict_flexible
+from adapter_io import load_state_dict_flexible, checkpoint_path
 from torch.utils.data import Dataset, DataLoader
 
 from transformers import AutoTokenizer
@@ -361,7 +361,7 @@ def main():
     df = df.dropna(subset=[args.name_col, args.seq_col]).copy()
 
     # tokenizerは最初のcheckpointのmodel_nameから作る
-    first_ckpt_path = os.path.join(args.model_dir, args.pt_folder_names[0], args.checkpoint_name)
+    first_ckpt_path = checkpoint_path(args.model_dir, args.pt_folder_names[0], args.checkpoint_name)
     first_ckpt = torch.load(first_ckpt_path, map_location="cpu")
     first_args = first_ckpt.get("args", {})
 
@@ -406,11 +406,7 @@ def main():
         )
     
     for fold, pt_folder_name in zip(args.folds, args.pt_folder_names):
-        ckpt_path = os.path.join(
-            args.model_dir,
-            pt_folder_name,
-            args.checkpoint_name,
-        )
+        ckpt_path = checkpoint_path(args.model_dir, pt_folder_name, args.checkpoint_name)
 
         if not os.path.exists(ckpt_path):
             raise FileNotFoundError(f"Checkpoint not found: {ckpt_path}")

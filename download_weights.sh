@@ -1,15 +1,11 @@
 #!/bin/bash
-# Download the trained LoRA / head checkpoints.
-# NOTE: the weights have not been deposited yet. Fill in WEIGHTS_URL (Hugging Face, Zenodo, ...) when they are.
+# Download the trained LoRA / head checkpoints (about 190 MB) from Hugging Face into weights/ (or the directory given as $1).
+#   HF_REPO=<user-or-org>/<repo> bash download_weights.sh [out_dir]
 set -euo pipefail
-WEIGHTS_URL="${WEIGHTS_URL:-}"
+HF_REPO="${HF_REPO:?set HF_REPO to the Hugging Face repository id of the weights, e.g. HF_REPO=<user>/monoyield-predictor}"
 OUT="${1:-weights}"
-if [ -z "$WEIGHTS_URL" ]; then
-  echo "WEIGHTS_URL is not set: the trained checkpoints are not published yet (see README)." >&2
-  exit 1
-fi
-mkdir -p "$OUT"
-echo "Downloading $WEIGHTS_URL -> $OUT"
-curl -L --fail -o "$OUT/weights.tar.gz" "$WEIGHTS_URL"
-tar -xzf "$OUT/weights.tar.gz" -C "$OUT"
-echo "done: $OUT"
+python - <<PY
+from huggingface_hub import snapshot_download
+p = snapshot_download(repo_id="${HF_REPO}", local_dir="${OUT}", allow_patterns=["*/*.pt"])
+print("downloaded to", p)
+PY

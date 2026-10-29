@@ -10,3 +10,4 @@ checkpoints/
 *.log
 .env
 hf_token*
+.DS_Store

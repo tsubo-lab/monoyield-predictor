@@ -12,3 +12,19 @@ def load_state_dict_flexible(model, sd, adapter_only=False):
     assert not bad, f"trained parameters missing from the adapter checkpoint: {bad[:5]}"
     print(f"  adapter-only checkpoint: loaded {len(sd)} tensors; {len(res.missing_keys)} frozen base tensors taken from the pretrained model")
     return res
+
+
+import os, re
+
+def checkpoint_path(model_dir, folder, checkpoint_name="best_model.pt"):
+    """`model_dir/<folder>/<checkpoint_name>` (training layout) or, if that does not exist, the released flat layout
+    `model_dir/<model_dir name>_<k>.pt` (e.g. weights/esmc_monoyield/esmc_monoyield_3.pt for folder `group_3`)."""
+    p = os.path.join(model_dir, folder, checkpoint_name)
+    if os.path.exists(p):
+        return p
+    m = re.search(r"(\d+)$", folder)
+    if m:
+        flat = os.path.join(model_dir, f"{os.path.basename(os.path.normpath(model_dir))}_{m.group(1)}.pt")
+        if os.path.exists(flat):
+            return flat
+    return p

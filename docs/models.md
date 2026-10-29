@@ -1,6 +1,6 @@
 # Models, checkpoints and figures
 
-Checkpoints are 5-fold ensembles (`group_1 ... group_5/best_model.pt`, adapter-only: LoRA + head, 7-12 MB per fold; the frozen base model is loaded from Hugging Face).
+Checkpoints are 5-fold ensembles (`<model>_1.pt ... <model>_5.pt`, adapter-only: LoRA + head, 7-12 MB per fold; the frozen base model is loaded from Hugging Face).
 
 | model | exported weights | paper panels |
 |---|---|---|

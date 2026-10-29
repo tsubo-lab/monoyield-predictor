@@ -4,8 +4,7 @@ Sequence-based predictors of the **monomeric expression yield in *E. coli*** (lo
 *[paper title - to be filled]*. LoRA-fine-tuned protein language models trained on the pooled-barcode MS yield assay
 (~35,000 de novo / DMS designs; nanobody library of 2,600 sequences).
 
-> **Status (draft):** code, example inputs and documentation are in place. The trained checkpoints are **not deposited yet**
-> (`download_weights.sh` is a stub). Scripts are the ones used for the paper; they have not been refactored into a package.
+> **Status (draft):** code, data, example inputs and documentation are in place. The trained weights (adapter-only, about 190 MB) are hosted on Hugging Face (`selena-setsu/monoyield-predictor`; see "Weights"). Scripts are the ones used for the paper; they have not been refactored into a package.
 
 ## Models
 
@@ -37,11 +36,19 @@ pip install -e .          # transformers==4.57.6, peft==0.19.1, ...
 ## Weights
 
 ```bash
-WEIGHTS_URL=<url> bash download_weights.sh weights/     # not available yet
+HF_REPO=selena-setsu/monoyield-predictor bash download_weights.sh weights/     # weights hosted on Hugging Face (private until publication)
 ```
-Each model is a directory with `group_1 ... group_5/best_model.pt`.
-**Note:** the checkpoints produced by the training scripts contain the full fp32 ESMC-6B state (~25 GB per fold, 5 folds per model).
-Before deposition, export only the LoRA adapter + head parameters (TODO, see `docs/models.md`).
+Each model is a directory of five adapter-only checkpoints (LoRA + head, 7-12 MB each; the frozen base model is downloaded from Hugging Face):
+
+```
+weights/
+├── esmc_monoyield/   esmc_monoyield_1.pt ... esmc_monoyield_5.pt
+├── saprot_lora/      saprot_lora_1.pt ... saprot_lora_5.pt
+├── esmc_nb_monoyield/ esmc_nb_monoyield_1.pt ... _5.pt
+└── esmc_nb_mdratio/  esmc_nb_mdratio_1.pt ... _5.pt
+```
+`<model>_k.pt` is the checkpoint of fold k (test group k). The prediction scripts take the directory (`--model_dir weights/esmc_monoyield`) and average the five folds.
+`scripts/export_adapter_weights.py` creates these files from the full training checkpoints (~25 GB per fold for ESMC-6B).
 
 ## Quick start
 
