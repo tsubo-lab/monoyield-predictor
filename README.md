@@ -4,7 +4,7 @@ Sequence-based predictors of the **monomeric expression yield in *E. coli*** (lo
 *[paper title - to be filled]*. LoRA-fine-tuned protein language models trained on the pooled-barcode MS yield assay
 (~35,000 de novo / DMS designs; nanobody library of 2,600 sequences).
 
-> **Status (draft):** code, data, example inputs and documentation are in place. The trained weights (adapter-only, about 190 MB) are hosted on Hugging Face (`selena-setsu/monoyield-predictor`; see "Weights"). Scripts are the ones used for the paper; they have not been refactored into a package.
+> **Status (draft):** code, data, example inputs and documentation are in place. The trained weights (adapter-only, about 190 MB) are hosted on Hugging Face (`Tsuboyama-Lab/monoyield-predictor`; see "Weights"). Scripts are the ones used for the paper; they have not been refactored into a package.
 
 ## Models
 
@@ -36,7 +36,7 @@ pip install -e .          # transformers==4.57.6, peft==0.19.1, ...
 ## Weights
 
 ```bash
-HF_REPO=selena-setsu/monoyield-predictor bash download_weights.sh weights/     # weights hosted on Hugging Face (private until publication)
+HF_REPO=Tsuboyama-Lab/monoyield-predictor bash download_weights.sh weights/     # weights hosted on Hugging Face (private until publication)
 ```
 Each model is a directory of five adapter-only checkpoints (LoRA + head, 7-12 MB each; the frozen base model is downloaded from Hugging Face):
 
