@@ -14,7 +14,7 @@ from transformers import AutoTokenizer
 from scipy import stats
 from sklearn.metrics import r2_score, mean_squared_error
 
-# 学習scriptから model class と utility をimport
+# import the model class and utilities from the training script
 from train_esmc_lora_one_stage_abs_wt_delta_residue_mean_clip import (
     EsmCLoRAResidueMeanRegressor,
     infer_esmc_hidden_size,
@@ -335,7 +335,7 @@ def main():
 
     df = df.dropna(subset=[args.name_col, args.seq_col]).copy()
 
-    # tokenizerは最初のcheckpointのmodel_nameから作る
+    # build the tokenizer from the model_name of the first checkpoint
     first_ckpt_path = checkpoint_path(args.model_dir, args.pt_folder_names[0], args.checkpoint_name)
     first_ckpt = torch.load(first_ckpt_path, map_location="cpu")
     first_args = first_ckpt.get("args", {})

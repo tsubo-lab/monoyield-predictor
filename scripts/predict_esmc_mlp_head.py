@@ -360,7 +360,7 @@ def main():
 
     df = df.dropna(subset=[args.name_col, args.seq_col]).copy()
 
-    # tokenizerは最初のcheckpointのmodel_nameから作る
+    # build the tokenizer from the model_name of the first checkpoint
     first_ckpt_path = checkpoint_path(args.model_dir, args.pt_folder_names[0], args.checkpoint_name)
     first_ckpt = torch.load(first_ckpt_path, map_location="cpu")
     first_args = first_ckpt.get("args", {})

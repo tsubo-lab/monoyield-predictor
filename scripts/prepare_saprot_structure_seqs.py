@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 """
-denovo_5fold.csv / dms_pair.csv の structure_path (PDB) から foldseek で得た
-3Di配列とaa_seqを組み合わせ、SaProt形式(aa+3di interleaved, 例: MdKpTn...)の
-saprot_seq / wt_saprot_seq 列を付与したCSVを書き出す。
+Combine the 3Di sequence obtained with foldseek from the structure_path (PDB) of denovo_5fold.csv / dms_pair.csv
+with aa_seq into the SaProt format (aa + 3di interleaved, e.g. MdKpTn...) and write a CSV with the
+saprot_seq / wt_saprot_seq columns added.
 
-3Diが取得できない、またはfoldseekが抽出したaa配列とCSVのaa_seqが一致しない場合は
-構造未知トークン(#)にフォールバックする。
+If no 3Di sequence is available, or the amino-acid sequence extracted by foldseek does not match the
+aa_seq in the CSV, fall back to the structure-unknown token (#).
 
-前提: 事前に以下でfoldseekのfastaを作成しておくこと
+Prerequisite: create the foldseek fasta files beforehand with:
   foldseek createdb <denovo_pdb_dir> structDB_denovo
   foldseek createdb <dms_pdb_dir> structDB_dms
   foldseek convert2fasta structDB_denovo structDB_denovo.fasta
@@ -87,7 +87,7 @@ def build_struct_lookup(aa_fasta_path, di_fasta_path):
 
 
 def to_saprot_seq(aa_seq, di_seq=None):
-    """aa_seq(+di_seq if given) -> SaProt形式の文字列。"""
+    """aa_seq (+ di_seq if given) -> SaProt-format string."""
     aa_seq = str(aa_seq)
 
     if di_seq is None:
@@ -97,7 +97,7 @@ def to_saprot_seq(aa_seq, di_seq=None):
 
 
 def lookup_saprot_seq(struct_path, aa_seq, lookup, stats, structure_col_label):
-    """structure_path + CSVのaa_seqから、可能なら構造対応、無理なら#フォールバック。"""
+    """From structure_path + the CSV aa_seq: use the structure-matched 3Di if possible, otherwise fall back to #."""
     basename = normalize_key(os.path.basename(str(struct_path)))
     aa_seq = str(aa_seq)
 
@@ -114,9 +114,9 @@ def lookup_saprot_seq(struct_path, aa_seq, lookup, stats, structure_col_label):
             stats["length_mismatch"] += 1
             return to_saprot_seq(aa_seq, None)
         stats["seq_mismatch_same_length"] += 1
-        # 長さは一致しているが配列が違う場合、3Diは位置対応が保証できないため
-        # 安全側でCSVのaa_seq + foldseekの3Diをそのまま組み合わせる
-        # (念のためカウントし、多発していないか確認すること)
+        # Same length but different sequence: the per-position correspondence of the 3Di is not guaranteed,
+        # so conservatively combine the CSV aa_seq with the foldseek 3Di as is
+        # (counted so that you can check it does not occur often)
 
     stats["ok"] += 1
     return to_saprot_seq(aa_seq, di_seq)
