@@ -28,7 +28,7 @@ pip install -e .          # transformers==4.57.6, peft==0.19.1, ...
 ```
 
 * **GPU memory.** ESMC-6B in fp32 needs ~25 GB (48 GB-class card, e.g. RTX 6000 Pro). `--dtype bfloat16` (available in all prediction scripts) halves this
-  (fits a 24 GB card). The numbers in the paper were produced in float32. A correlation of > 0.99 between bfloat16 and float32 predictions was confirmed (on the example sequences of each model).
+  (fits a 24 GB card). The numbers in the paper were produced in float32. A correlation of > 0.99 between bfloat16 and float32 predictions was confirmed (Pearson r = 0.9998 for the 5-fold ensemble, >= 0.999 for each fold, on 226 coronavirus binder designs with an ESMC-6B LoRA model; r > 0.999 also on the example sequences of each released model).
 * **Pin the Hugging Face revision.** The `main` revision of `biohub/ESMC-6B` / `ESMC-600M` changed after the models were trained and can break loading.
   Use the training revisions: ESMC-6B `45b0fa5d7fb06faefbd5e3b89bdcef35d564e79a`, ESMC-600M: the revision recorded with the training run (pass `--model_revision`; the full hash still has to be copied here).
 * If the model repository is gated, `export HF_TOKEN=...` (the scripts call `huggingface_hub.login`).
