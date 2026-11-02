@@ -1,5 +1,5 @@
 """ExtFig1a: replicate reproducibility of the lib77 sub16/17 Astral runs (rep1 = barcode-test-1, rep2 = barcode-test-2), 1,038 proteins.
-left  = mean log10 intensity of all 40 barcodes per protein, rep1 vs rep2 (total soluble and monomeric protein);
+left  = mean log10 intensity of all 40 barcodes per protein, rep1 vs rep2 (monomeric protein);
 mid   = Pearson R between the replicates vs number of barcodes sampled per design (25 random seeds, mean +- SD);
 right = rep1 vs rep2 using 15 random barcodes per design (monomer).
 Tables: S22c (protein level, left), S22b (barcode level, mid and right)."""
@@ -42,7 +42,7 @@ def annotate(ax, x, y, digits):
 prot = load("S22c")
 prot = prot[~prot["name"].str.contains("spike", case=False)]
 fig = plt.figure(figsize=(8 / 2.54, 4 / 2.54), tight_layout=True, dpi=300)
-for pos, frac, color, title in [(2, "monomer", COLOR_MONO, "Monomeric protein"), (1, "sup", COLOR_SUP, "Total soluble protein")]:
+for pos, frac, color, title in [(2, "monomer", COLOR_MONO, "Monomeric protein")]:   # drawn in the right half of the 1x2 grid, as in the original notebook figure
     ax = fig.add_subplot(1, 2, pos)
     x, y = prot[f"log_{frac}_rep1"], prot[f"log_{frac}_rep2"]
     sns.scatterplot(x=x, y=y, alpha=0.25, s=6, ax=ax, color=color)
