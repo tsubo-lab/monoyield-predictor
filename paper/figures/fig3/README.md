@@ -9,11 +9,11 @@ Shared code: `dms_data.py` (data preparation from S04 / S23a / S23b) and `dms_pl
 | Fig3b DMS yield vs dG (hexbin) | `fig3b_yield-vs-dG.py` | S04 | `Fig3b.pdf` | done (deltaG_95CI <= 0.5: n = 14,551, r = 0.555) |
 | Fig3c aggregated AA effects (target / source) | `fig3c_aa-effects.py` | S04 | `Fig3c-target.pdf`, `Fig3c-source.pdf` | done |
 | Fig3e 1PGA, Fig3f 1AOY: scatter + dG / yield heatmaps | `fig3ef_1pga-1aoy.py` | S04 | `Fig3e-1PGA-{scatter,dG-heatmap,yield-heatmap}.pdf`, `Fig3f-1AOY-...` | done (red boxes of Fig3e were drawn by hand; structure renders out of scope) |
-| Fig3g Pearson R with slope | `fig3gh_extfig9_slope-features.py` | S04, S23a, S23b | `Fig3g.pdf` | done |
+| Fig3g Pearson R with slope (buried_np_AFILMVWY dropped, 2026-11-02) | `fig3gh_extfig9_slope-features.py` | S04, S23a, S23b | `Fig3g.pdf` | done |
 | Fig3h slope vs hydrophobicity | `fig3gh_extfig9_slope-features.py` | S04, S23a, S23b | `Fig3h.pdf` | done |
 | ExtFig6a delta yield / ddG boxes (target, source) | `extfig6a_aa-boxes.py` | S04 | `ExtFig6a-{target,source}-{yield,ddG}.pdf` | done |
 | ExtFig7 A-E (9 proteins) | `extfig7_dms-summaries.py` | S04 | `ExtFig7{A..E}-<PDB>.pdf` | partly: scatter and both heatmaps done; the structure image (top-left) is a rendered PDB and is left blank |
-| ExtFig8 per-protein dG vs yield grid (56 proteins) | `extfig8_dg-vs-yield-grid.py` | S04 | `ExtFig8.pdf` | done |
+| ExtFig8 per-protein dG vs yield grid (56 proteins; 2026-11-02 layout) | `extfig8_dg-vs-yield-grid.py` | S04 | `ExtFig8.pdf` | done |
 | ExtFig9 slope vs hydrophobicity metrics | `fig3gh_extfig9_slope-features.py` | S04, S23a, S23b | `ExtFig9.pdf` | done |
 | Fig3d, structures of Fig3e/f and ExtFig7, Fig3i | - | - | - | not in scope (renders / schematic) |
 

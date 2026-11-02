@@ -14,12 +14,12 @@ Data conventions (checked against the original analysis):
 | panel | script | tables | status |
 |---|---|---|---|
 | Fig 2a | - | - | out of scope (schematic + methods table) |
-| Fig 2b | `fig2b_yield_per_backbone.py` | S04, S13, S17 | done |
+| Fig 2b | `fig2b_yield_per_backbone.py` | S04, S13, S17 | done (2026-11-02 version: median bars, colour-blind palette, all α / αβ / all β labels) |
 | Fig 2c | `fig2cd_extfig5b_backbone_features.py` | S04, S13, S17 | done (bootstrap, seed 0, 1000 resamples; backbones sorted by label as in the original so the CIs are identical) |
 | Fig 2d (Rg, contact order) | `fig2cd_extfig5b_backbone_features.py` | S04, S13, S17 | done |
-| Fig 2e | `fig2e_extfig5de_af_boxplot_scatter.py` | S04, S17 | done |
+| Fig 2e | `fig2e_extfig5de_af_boxplot_scatter.py` | S04, S17 | done (TM-score box plot in the flare palette since 2026-11-02) |
 | Fig 2f | `fig2fgh_extfig5fg_filter_performance.py` | S04, S17 | done |
-| Fig 2g | `fig2fgh_extfig5fg_filter_performance.py` | S04, S17 | done (numeric labels of the notebook output kept, as in the reference PDF) |
+| Fig 2g | `fig2fgh_extfig5fg_filter_performance.py` | S04, S17 | done (2026-11-02 version: labels are the percentages of designs above 0 and 1 log10 mg/L) |
 | Fig 2h | `fig2fgh_extfig5fg_filter_performance.py` | S04, S17 | done |
 | Fig 2i top / bottom | `fig2i_stacked_bars.py` | S04, S17 | done |
 | ExtFig 5a | - | (S13 `origin`) | out of scope: typeset table. Counts per origin are in S13 (SALAD 14, RFdiffusion2 6, ...; see README of source_data_v2, note 3) |
@@ -33,3 +33,5 @@ Data conventions (checked against the original analysis):
 Agreement with `reproduced_figures/Fig2/*_reproduced.pdf`: text tokens identical for all 24 PDFs; pixel difference (100 dpi, |diff| > 40)
 0.000 for all except ExtFig 5f (0.012, sub-pixel marker positions). No data gaps: S13 is not needed beyond the backbone features, labels
 and SS groups.
+
+ExtFig 5c (2026-11-02): one figure with the four ECDF sets (AF3 / AF2 x pLDDT / TM-score) -> `ExtFig5c.pdf` (`extfig5c_filter_ecdf.py`); the TM-score ECDFs, box plots and density plots use the flare palette.

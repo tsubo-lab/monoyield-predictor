@@ -95,8 +95,8 @@ def hexbin_panel(ax, y_pred, y_true, dt, same_scale=True, cmap=None):
         xp = xr * 0.05 if xr > 0 else 0.5
         ax.set_xlim(y_pred.min() - xp, y_pred.max() + xp)
         ax.locator_params(axis='x', nbins=4)
-    ax.text(0.05, 0.94, f"r = {r:.2f}\nRMSE = {rmse:.2f}\nn = {len(y_pred)}", transform=ax.transAxes, va='top', ha='left', fontsize=6)
-    ax.set_title({'all_data': 'All data', 'denovo': 'De novo', 'dms': 'Mutational effect \nΔ(mutant-WT)'}.get(dt, dt), fontsize=6, pad=3)
+    ax.text(0.5, 1.01, f"r = {r:.2f}   RMSE = {rmse:.2f}", transform=ax.transAxes, ha='center', va='bottom', fontsize=6, clip_on=False)   # 2026-11-02: stats above the panel, n removed
+    ax.set_title({'all_data': 'All data', 'denovo': 'De novo', 'dms': 'Mutational effect \nΔ(mutant-WT)'}.get(dt, dt), fontsize=6, pad=10)
     ax.set_xlabel('Predicted'); ax.set_ylabel('Observed')
     ax.tick_params(axis='both', which='major', labelsize=6, pad=1)
     return r

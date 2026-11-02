@@ -15,3 +15,5 @@ Not included: schematics, rendered structures and hand-annotated panels (Fig. 1a
 The tables and their columns are described in `tables/README.md`.
 
 `common/tables.py` loads a table by key, e.g. `load("S04")` (main library, protein level), `load("S15a")` (Fig. 4 predictions).
+
+Update 2026-11-02 (figure version of `original_figs_261102`): Fig1h, ExtFig1a (now one 3-panel figure; ExtFig1a's total-soluble panel removed), ExtFig1c (was ExtFig2a, one 3 x 5 figure), ExtFig2 (was ExtFig2b, one 3 x 5 figure), ExtFig3a labels, Fig2b/e/g, ExtFig5c (one figure), Fig3g, ExtFig8, ExtFig9, Fig4d/e, ExtFig11 and Fig4hi were redrawn to follow the changed notebooks. A full run now writes 17 / 24 / 27 / 23 / 18 PDFs for fig1-fig5 (fig1 had 47 files while ExtFig2a/b were 30 separate PDFs). `common/style.py: set_style(arial_math=True)` reproduces the Arial math text of the new Fig1e/g/h, ExtFig1c/2/3a notebooks.

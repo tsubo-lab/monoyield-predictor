@@ -11,13 +11,11 @@ Agreement is measured against `reproduced_figures/Fig1/*_reproduced.pdf` (text t
 | Fig1d-right (spike v1 reference QC) | `fig1d_spike_calibration.py` | S11b, S12c | done; pixel-identical |
 | Fig1e (dms-3 conversion) | `fig1e_g_extfig2.py` | S02, S10b, S11b | done; pixel-identical (see note 2) |
 | Fig1g (denovo-3 inferred vs mean of controls) | `fig1e_g_extfig2.py` | S09b | done; pixel-identical |
-| Fig1h (pooled MS vs individual HPLC, n = 48) | `fig1h_hplc_vs_ms.py` | S14a | done; pixel-identical (r = 0.757, rho = 0.777) |
-| ExtFig1a-left (rep1 vs rep2, 1,038 proteins) | `extfig1a_lib1617.py` | S22c | done; pixel-identical |
-| ExtFig1a-mid (Pearson R vs number of barcodes) | `extfig1a_lib1617.py` | S22b | done; pixel-identical |
-| ExtFig1a-right (15 barcodes) | `extfig1a_lib1617.py` | S22b | done; pixel-identical |
+| Fig1h (pooled MS vs individual HPLC, n = 48) | `fig1h_hplc_vs_ms.py` | S14a | done (2026-11-02 version: one point per protein, r and rho in the panel); 0.08 % pixels differ, r = 0.757 vs 0.758 in the figure (S14a pooled yields vs the notebook's csv) |
+| ExtFig1a (replicate reproducibility: 40 barcodes, 15 barcodes, Pearson R vs number of barcodes; monomer only) | `extfig1a_lib1617.py` | S22b, S22c | done (2026-11-02 version: one 3-panel figure) |
 | ExtFig1b (library table) | - | S01 | manual / table, out of scope |
-| ExtFig2a (15 libraries) | `fig1e_g_extfig2.py` -> `ExtFig2a_<lib>.pdf` | S02, S10b, S11b | done; 15/15 pixel-identical |
-| ExtFig2b (15 libraries) | `fig1e_g_extfig2.py` -> `ExtFig2b_<lib>.pdf` | S09b | done; 15/15 pixel-identical |
+| ExtFig1c (conversion of the 15 sublibraries, 3 x 5) | `fig1e_g_extfig2.py` -> `ExtFig1c.pdf` | S02, S10b, S11b | done; pixel-identical (2026-11-02: was ExtFig2a, 15 files) |
+| ExtFig2 (controls vs their mean, 15 sublibraries, 3 x 5) | `fig1e_g_extfig2.py` -> `ExtFig2.pdf` | S09b | done; pixel-identical (2026-11-02: was ExtFig2b, 15 files) |
 | ExtFig3a chromatograms | `extfig3a_cytochrome.py` | hplc cytochromeC (wide csv) | done; pixel-identical |
 | ExtFig3a AUC vs mass | `extfig3a_cytochrome.py` | S14c (S14b printed as check) | done; pixel-identical; 6th dilution is 0.03125 mg/mL (0.003125 mg), fit slope 0.9703 / intercept -7.2711 |
 | ExtFig3b (48 chromatograms) | `extfig3b_hplc_individual.py` | hplc individual (wide csv), S14a | done; pixel-identical; panel order = row order of S14a |

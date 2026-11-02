@@ -20,14 +20,14 @@ N_TOP = 20                        # features that get a bootstrap CI
 N_BOOT = 1000
 HIGHLIGHT = ["1pga", "2lgw", "6m3n", "1uzc", "1r69", "2kcm", "1aoy"]
 FEATURE_LABEL = {
-    "buried_npsa_FAMILYVW": "Buried nonpolar area\n(FAMILYVW)",
-    "buried_np_AFILMVWY": "Buried nonpolar residues\n(AFILMVWY)",
-    "buried_np": "Buried nonpolar residues",
-    "buried_npsa": "Buried nonpolar area",
+    "buried_np": "Buried nonpolar area\n(all residues)",
+    "buried_npsa": "Buried nonpolar area\n(all residues)",
+    "buried_np_AFILMVWY": "Buried nonpolar area\n(AFILMVWY)",
+    "buried_npsa_FAMILYVW": "Buried nonpolar area\n(AFILMVWY)",
     "buried_np_per_res": "Buried nonpolar residues per residue",
     "buried_np_AFILMVWY_per_res": "Buried nonpolar residues per residue\n(AFILMVWY)",
-    "n_hydrophobic_noA": "Hydrophobic residues\n(excluding Ala)",
-    "n_hydrophobic": "Hydrophobic residues",
+    "n_hydrophobic_noA": "Number of hydrophobic residues\n(FILMVWY)",
+    "n_hydrophobic": "Number of hydrophobic residues\n(AFILMVWY)",
     "hydrophobicity": "Hydrophobicity",
     "buried_minus_exposed": "Buried − exposed",
     "buried_npsa_core": "Core nonpolar area",
@@ -82,14 +82,15 @@ ci = [bootstrap_pearsonr(df_m[f].to_numpy(), df_m["slope"].to_numpy()) for f in 
 top["err_low"] = top["pearsonR"] - [c[0] for c in ci]
 top["err_high"] = [c[1] for c in ci] - top["pearsonR"]
 shown = top[(~top["feature"].str.contains("freq")) & (top["p"] < P_MAX)].sort_values("p").reset_index(drop=True)
+shown = shown[shown["feature"] != "buried_np_AFILMVWY"].reset_index(drop=True)   # dropped from Fig3g / ExtFig9 (2026-11-02)
 shown["label"] = shown["feature"].map(FEATURE_LABEL).fillna(shown["feature"])
 print(shown[["feature", "pearsonR", "err_low", "err_high", "p"]].to_string())
 
 # ---- Fig3g
 n = len(shown)
-fig = plt.figure(figsize=(8 / 2.54, (n * 0.2) + 0.5 / 2.54), dpi=300, tight_layout=True)
+fig = plt.figure(figsize=(7.5 / 2.54, 4 / 2.54), dpi=300, tight_layout=True)
 ax = fig.add_subplot(1, 1, 1)
-sns.barplot(data=shown.assign(label=shown["label"].str.replace("\n", " ")), x="pearsonR", y="label", orient="h", ax=ax)
+sns.barplot(data=shown, x="pearsonR", y="label", orient="h", ax=ax)
 ax.errorbar(x=shown["pearsonR"].to_numpy(), y=np.arange(n), xerr=np.vstack([shown["err_low"], shown["err_high"]]),
             fmt="none", ecolor="black", elinewidth=0.8, capsize=2, capthick=0.8)
 ax.axvline(0, color="black", linewidth=0.8)
@@ -113,12 +114,12 @@ ax.tick_params(axis="both", which="major", pad=1)
 fig.savefig(os.path.join(OUT, "Fig3h.pdf"), bbox_inches="tight")
 
 # ---- ExtFig9
-fig = plt.figure(figsize=(10 / 2.54, 6 / 2.54), dpi=300, tight_layout=True)
+fig = plt.figure(figsize=(10 / 2.54, 7 / 2.54), dpi=300, tight_layout=True)
 for i, col in enumerate(shown["feature"]):
     ax = fig.add_subplot(2, 3, i + 1)
     sns.scatterplot(data=df_m, x=col, y="slope", alpha=0.7, s=6, ax=ax)
     r = res.loc[res["feature"] == col, "pearsonR"].values[0]
-    ax.text(0.05, 0.95, f"r = {r:.3f}", transform=ax.transAxes, ha="left", va="top")
+    ax.text(0.05, 1.05, f"r = {r:.3f}", transform=ax.transAxes, ha="left", va="top")
     ax.set_xlabel(FEATURE_LABEL.get(col, col), labelpad=1)
     ax.set_ylabel("Slope", labelpad=1)
     ax.tick_params(axis="both", which="major", pad=1)

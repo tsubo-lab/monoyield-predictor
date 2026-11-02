@@ -3,7 +3,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def set_style(font_size=6, palette='tab10'):
+def set_style(font_size=6, palette='tab10', arial_math=False):
+    """arial_math=True: math text (log$_{10}$ ...) set in Arial, as in the 2026-11-02 notebooks (Fig1e/g/h, ExtFig1c/2/3a); default = STIX."""
     custom_params = {"axes.spines.right": False, "axes.spines.top": False}
     sns.set_theme(style="ticks", palette=sns.color_palette(palette), rc=custom_params)
     plt.rcParams["xtick.direction"] = "out"
@@ -27,3 +28,6 @@ def set_style(font_size=6, palette='tab10'):
         'mathtext.default': 'default',
         'mathtext.fontset': 'stix',
     })
+    if arial_math:
+        plt.rcParams.update({"mathtext.fontset": "custom", "mathtext.rm": "Arial", "mathtext.it": "Arial:italic",
+                             "mathtext.bf": "Arial:bold", "mathtext.default": "regular"})

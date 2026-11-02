@@ -109,7 +109,7 @@ for name in order:
     for x0 in [0, 1]:
         y0 = (values <= x0).mean()
         ax.vlines(x=x0, ymin=0, ymax=y0, colors=pal[name], linestyles="--", linewidth=0.5)
-        ax.annotate(f"{y0:.3f}", xy=(x0, y0), xytext=(-3, 3) if name == "all" else (3, 3), textcoords="offset points",
+        ax.annotate(f"{(values > x0).mean():.1%}", xy=(x0, y0), xytext=(-3, 3) if name == "all" else (3, 3), textcoords="offset points",
                     ha="right" if name == "all" else "left", va="bottom", fontsize=6, color=pal[name])
         print(f"Fig2g ECDF({name}) at log10 yield <= {x0}: {y0:.4f}  (n = {len(values)})")
 ax.set_ylim(bottom=0)

@@ -50,8 +50,8 @@ ax.set_ylim(-1, y0 * 1.27)
 ax.set_yticks([0, 10, 20])
 for pos, sel in enumerate(ORDER):
     rate = (pool.loc[pool["selection_new"] == sel, "est_amount"] >= 10).mean() * 100
-    ax.text(pos, -0.15, f"{rate:.1f}%", transform=ax.get_xaxis_transform(), ha="center", va="top", color=PAL[sel], fontsize=5, clip_on=False)
-ax.text(-0.03, -0.15, "≥10 mg/L:", transform=ax.transAxes, ha="right", va="top", fontsize=5, clip_on=False)
+    ax.text(pos, -0.15, f"{rate:.1f}%", transform=ax.get_xaxis_transform(), ha="center", va="top", color=PAL[sel], fontsize=6, clip_on=False)
+ax.text(-0.03, -0.15, "≥10 mg/L:", transform=ax.transAxes, ha="right", va="top", fontsize=6, clip_on=False)
 
 ax = axes[1]
 for sel in ORDER:
@@ -61,16 +61,14 @@ ax.axhline(y=1, color="grey", linestyle="--", linewidth=0.8)
 ax.text(0.05, 0.95, f"r = {r2:.2f}", transform=ax.transAxes, ha="left", va="top", fontsize=6)
 ax.set_xlabel("Predicted")
 ax.set_ylabel("HPLC based individual assay\nlog$_{10}$ (monomeric yield) (mg/L)")
-ax.legend(frameon=False, fontsize=4.5, loc="lower right", labelcolor="linecolor", handlelength=0, handletextpad=0, markerscale=0)
+ax.legend(frameon=False, fontsize=6, loc="lower right", labelcolor="linecolor", handlelength=0, handletextpad=0, markerscale=0)
 ax.tick_params(axis="both", which="major", pad=1)
 for ax in axes:
     ax.set_facecolor("white"); ax.set_axisbelow(True)
     ax.grid(True, color="0.94", linewidth=0.7)
     ax.spines["top"].set_visible(False); ax.spines["right"].set_visible(False)
-    for side in ["left", "bottom"]:
-        ax.spines[side].set_color("0.55"); ax.spines[side].set_linewidth(0.6)
-    ax.tick_params(axis="both", labelsize=5.5, pad=1, length=2, width=0.5, color="0.55", labelcolor="0.25")
-    ax.xaxis.label.set_size(5.5); ax.yaxis.label.set_size(5.5)
+    ax.tick_params(axis="both", labelsize=6, pad=1, length=2, width=0.5, color="0.55", labelcolor="0.25")
+    ax.xaxis.label.set_size(6); ax.yaxis.label.set_size(6)
     ax.xaxis.labelpad = 2; ax.yaxis.labelpad = 2
 axes[1].set_yticks([-1, -0.5, 0, 0.5, 1, 1.5]); axes[1].set_ylim(-1, 1.55); axes[1].set_xticks([0, 0.5])
 fig.subplots_adjust(left=0.16, right=0.98, bottom=0.25, top=0.94, wspace=0.82)

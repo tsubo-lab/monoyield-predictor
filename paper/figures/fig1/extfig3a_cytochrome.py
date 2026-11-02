@@ -11,7 +11,7 @@ from scipy import stats
 from common.tables import load, hplc, outdir
 from common.style import set_style
 
-set_style()
+set_style(arial_math=True)
 RT_WINDOW = (33, 40)
 out = outdir("fig1")
 
@@ -41,8 +41,8 @@ fig = plt.figure(figsize=(4 / 2.54, 3.5 / 2.54), tight_layout=True, dpi=300)
 ax = fig.add_subplot(111)
 colors = [color_of[min(unique_masses, key=lambda m: abs(np.log10(m) - v) if m > 0 else np.inf)] for v in cal["log10_input_mass_mg"]]
 ax.scatter(cal["log10_AUC"], cal["log10_input_mass_mg"], c=colors, s=6, alpha=0.8, linewidths=0.2, edgecolors="white")
-ax.set_xlabel("log10(AUC)")
-ax.set_ylabel("log10(input mass) mg")
+ax.set_xlabel(r"$\log_{10}$(AUC)")
+ax.set_ylabel(r"$\log_{10}$(input mass) mg")
 ax.set_xticks(np.arange(4.5, 6.5, 0.5))
 ax.set_yticks(np.arange(-3, -0.8, 0.5))
 ax.grid(axis="y", linestyle="--", linewidth=0.5, alpha=0.5)

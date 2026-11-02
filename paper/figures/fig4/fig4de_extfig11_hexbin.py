@@ -13,7 +13,7 @@ a, den, b = load_pred()
 SINGLE = {'ESMC 6B': 'ESMC-MonoYield', 'Saprot 1.3B': 'SaProt-LoRA', 'Aggrescan3D': 'Aggrescan3D'}
 
 def single(model, dt, fname):
-    fig = plt.figure(figsize=(3.1 / 2.54, 3.1 / 2.54), dpi=300, tight_layout=True)
+    fig = plt.figure(figsize=(3.5 / 2.54, 3.5 / 2.54), dpi=300, tight_layout=True)
     ax = fig.add_subplot(1, 1, 1)
     is_tool = model in TOOLS
     yp, yt = condition_data(model, dt, a, den, b)
@@ -46,7 +46,7 @@ for pi, page in zip('ABC', pages):
             hexbin_panel(ax, yp, yt, dt, same_scale=model not in TOOLS, cmap=hexbin_cmap_for(model))
             if dt in ('all_data', 'denovo'): ax.set_ylim(-1.6, 2.2)
             ax.set_box_aspect(1)
-            ax.set_title({'all_data': 'All data', 'denovo': 'De novo', 'dms': 'Mutational effect'}[dt], fontsize=6, pad=1)
+            ax.set_title({'all_data': 'All data', 'denovo': 'De novo', 'dms': 'Mutational effect'}[dt], fontsize=6, pad=10)
             ax.set_xlabel('Predicted' if dt != 'dms' else 'Predicted\nmutational effect', fontsize=6, labelpad=1)
             ax.set_ylabel('Observed' if j == 0 else '', fontsize=6, labelpad=1)
             ax.tick_params(axis='both', labelsize=6, pad=1)

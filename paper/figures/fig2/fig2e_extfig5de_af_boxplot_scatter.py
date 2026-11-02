@@ -29,7 +29,7 @@ def boxplot(df, name):
             ("bin_plddt", name + " pLDDT", ["0"] + list(range(50, 105, 10))),
             ("bin_tm", name + " prediction based TM-score", ["0"] + [str(x) for x in TM_BINS[1:]])], start=1):
         ax = fig.add_subplot(1, 2, i)
-        sns.boxplot(df.sort_values(bin_col), x=bin_col, y="monomer_log_mgL", palette="crest", linewidth=0.5,
+        sns.boxplot(df.sort_values(bin_col), x=bin_col, y="monomer_log_mgL", palette="crest" if i == 1 else "flare", linewidth=0.5,
                     fliersize=0.5, gap=0.2, hue=bin_col, legend=False, dodge=False, ax=ax)
         ax.set_xlabel(xlabel, labelpad=2)
         ax.set_ylabel(YLABEL if i == 1 else "", labelpad=2)
@@ -49,7 +49,7 @@ def density_scatter(df, name, size):
             ("mean_plddt", f"pLDDT ({name})", (40, 100), np.arange(40, 101, 10)),
             ("tmscore", f"TMscore ({name})", (0.2, 1), np.arange(0.2, 1.1, 0.2))], start=1):
         ax = fig.add_subplot(1, 2, i)
-        ax.hexbin(df[col], df["monomer_log_mgL"], gridsize=100, mincnt=1, bins="log", cmap=cmap)
+        ax.hexbin(df[col], df["monomer_log_mgL"], gridsize=100, mincnt=1, bins="log", cmap=cmap if i == 1 else sns.color_palette("flare", as_cmap=True))
         ax.tick_params(axis="both", which="major", pad=1)
         ax.set_xlabel(xlabel, labelpad=1)
         ax.set_ylabel(r"log$_{10}$ (monomeric yield)" + "\n(mg/L)" if i == 1 else ("" if name == "AF3" else "\n"), labelpad=1)
