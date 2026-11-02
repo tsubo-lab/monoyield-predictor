@@ -31,7 +31,7 @@ Main library = 15 sublibraries (codon-1, denovo-1..8, dms-1..5, muts-1); nanobod
 | S20 | codon-1 DNA sequences with CAI / tAI (a); CAI / tAI of de novo and DMS-WT constructs (b) | |
 | S21 | index of the raw HPLC chromatogram files | |
 | S22 | mGL barcode replicates (a, Fig. 1b); lib77 sub16/17 Astral run, barcode level (b) and protein level (c) (ExtFig. 1a) | |
-| S24 | Rosetta score_monomeric of the WT structures (a) and of the feature-score set (b) | |
-| S25 | full nanobody feature table (csv.gz) (a); top-correlated feature clusters (b) | 2,589 |
-| S26 | ESMFold2 pLDDT / pTM, contact order, radius of gyration, core fraction per design | 35,798 |
+| S23 | Rosetta score_monomeric of the WT structures (a) and of the feature-score set (b) | |
+| S24 | full nanobody feature table (csv.gz) (a); top-correlated feature clusters (b) | 2,589 |
+| S25 | ESMFold2 pLDDT / pTM, contact order, radius of gyration, core fraction per design | 35,798 |
 | `hplc_chromatograms/` | raw HPLC chromatograms (R_Time + one column per sample, named by protein) | 7,201 |

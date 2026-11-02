@@ -1,6 +1,6 @@
 """Fig 5c / 5d: Pearson R (with bootstrap 95% CI) of nanobody features with monomer yield (5c) and monomer/dimer ratio (5d).
 
-Tables: S07 (yields), S25 (full feature table), S25b (pooled representative features), S08 (AF3/ESMFold2 ipTM/pLDDT, ESM3dG).
+Tables: S07 (yields), S24 (full feature table), S24b (pooled representative features), S08 (AF3/ESMFold2 ipTM/pLDDT, ESM3dG).
 """
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
@@ -79,7 +79,7 @@ def bootstrap_pearsonr(x, y, n_boot=N_BOOT, ci=95, random_state=0):
 
 
 # ---- data ----
-top = load("S25b")
+top = load("S24b")
 top["representative"] = top["representative"].str.replace("freq_CA", "cdr3_len")
 learncols = {t: list(top[(top.group == "pooled") & (top.target == t)]["representative"]) + EXTRA
              for t in TARGETS.values()}
@@ -91,7 +91,7 @@ y[["monomer_log_mgL", "dimer_log_mgL"]] = y[["monomer_log_mgL", "dimer_log_mgL"]
 y["monomer_dimer_ratio_log"] = y["monomer_log_mgL"] - y["dimer_log_mgL"]
 
 feat_cols = sorted({c for v in learncols.values() for c in v} - set(EXTRA))
-feat = pd.read_csv(path("S25"), usecols=["name"] + feat_cols)
+feat = pd.read_csv(path("S24"), usecols=["name"] + feat_cols)
 feat["key"] = feat["name"].str.lower()
 s08 = load("S08")
 s08["key"] = s08["name"].str.lower()

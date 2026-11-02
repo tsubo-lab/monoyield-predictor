@@ -1026,8 +1026,8 @@ af3_ptm,AF3 pTM,Structure prediction quality,xgboost_feature_set (also feature_d
 af3_ranking_score,AF3 ranking score,Structure prediction quality,xgboost_feature_set (also feature_d)
 deltaG_pred,"Predicted absolute ΔG
 (ESM3ΔG)",Folding stability,"ESM3dG predicted absolute dG (feature_d, zero-shot)"
-esmfold_plddt,ESMFold pLDDT,Structure prediction quality,per-design structure metric (TableS26)
-esmfold_ptm,ESMFold pTM,Structure prediction quality,per-design structure metric (TableS26)
-CO,Contact order,Structure geometry,per-design structure metric (TableS26)
-rg,Radius of gyration,Structure geometry,per-design structure metric (TableS26)
-frac_core,Core fraction,Packing of core,per-design structure metric (TableS26)
+esmfold_plddt,ESMFold pLDDT,Structure prediction quality,per-design structure metric (TableS25)
+esmfold_ptm,ESMFold pTM,Structure prediction quality,per-design structure metric (TableS25)
+CO,Contact order,Structure geometry,per-design structure metric (TableS25)
+rg,Radius of gyration,Structure geometry,per-design structure metric (TableS25)
+frac_core,Core fraction,Packing of core,per-design structure metric (TableS25)

@@ -1,4 +1,4 @@
-"""Shared data preparation for the Fig. 3 family (DMS panels), built only from Table S04 (+ S24a/S24b for the Rosetta WT features).
+"""Shared data preparation for the Fig. 3 family (DMS panels), built only from Table S04 (+ S23a/S23b for the Rosetta WT features).
 
 Two views of the same table are used by the original notebooks:
   * `heatmap_view()`  (260701_dms_heatmap.ipynb): all DMS rows, dG without CI filter -> Fig3b/c/e/f, ExtFig6a, ExtFig7.
@@ -95,8 +95,8 @@ def fit_view():
 
 
 def rosetta_wt_features(df_wt, df_pr):
-    """WT Rosetta score_monomeric features (S24a + S24b) merged with the per-protein fits (proteins with > MIN_MUTS valid mutants)."""
-    sc = pd.concat([load("S24a"), load("S24b")])
+    """WT Rosetta score_monomeric features (S23a + S23b) merged with the per-protein fits (proteins with > MIN_MUTS valid mutants)."""
+    sc = pd.concat([load("S23a"), load("S23b")])
     sc["name"] = sc.iloc[:, 0].apply(lambda x: x.split("/")[1][:-4].lower())
     sc = pd.merge(sc, df_wt["name"]).drop_duplicates(subset="name")
     sc = sc[sc.columns[sc.isna().sum(axis=0) == 0]]

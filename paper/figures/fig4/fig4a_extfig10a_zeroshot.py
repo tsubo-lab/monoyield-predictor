@@ -2,7 +2,7 @@
 (all data = de novo + DMS), top-10 features with bootstrap 95% CI, and hexbin plots of the same features.
 
 Tables: S04 (monomer_log_mgL, measured dG, source), S05 (features incl. ESM3dG deltaG_pred), S05_feature_list (paper labels / groups).
-S26 (ESMFold2 pLDDT/pTM, contact order, radius of gyration, core fraction per design).
+S25 (ESMFold2 pLDDT/pTM, contact order, radius of gyration, core fraction per design).
 """
 import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
@@ -28,7 +28,7 @@ feat_cols = list(s5.columns[2:])
 learncols = [c for c in feat_cols if pd.Series(c).str.contains(INCLUDE).iloc[0] and not pd.Series(c).str.contains(EXCLUDE).iloc[0]
              and s5[c].dtype.kind in "fi"]
 df = s5[["sublib", "name"] + learncols].merge(s4, on=["sublib", "name"], how="left")
-s26 = load("S26").drop_duplicates("name")[["name", "esmfold_plddt", "esmfold_ptm", "contact_order", "radius_of_gyration", "fraction_core_residues"]]
+s26 = load("S25").drop_duplicates("name")[["name", "esmfold_plddt", "esmfold_ptm", "contact_order", "radius_of_gyration", "fraction_core_residues"]]
 s26 = s26.rename(columns={"contact_order": "CO", "radius_of_gyration": "rg", "fraction_core_residues": "frac_core"})
 df = df.merge(s26, on="name", how="left")
 df["deltaG"] = df["deltaG_measured_kcal_mol"].where(df["deltaG_95CI"] <= 0.5)   # original filter: 95% CI <= 0.5

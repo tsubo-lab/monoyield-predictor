@@ -1,7 +1,7 @@
 """Fig3g, Fig3h, ExtFig9: which structural features of the wild type explain the per-protein dG-vs-yield slope.
 Fig3g: Pearson r of the features most associated with the slope (bootstrap 95 % CI); Fig3h: slope vs hydrophobicity (selected
 proteins labelled); ExtFig9: slope vs each of those features.
-Tables: S04 (per-protein fits), S24a + S24b (Rosetta score_monomeric of the WT structures)."""
+Tables: S04 (per-protein fits), S23a + S23b (Rosetta score_monomeric of the WT structures)."""
 import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
