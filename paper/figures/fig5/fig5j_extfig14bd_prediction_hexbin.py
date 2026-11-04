@@ -2,9 +2,9 @@
 predictions of the 5-fold cross-validation).
   Fig5j-yield / Fig5j-ratio : ESMC-Nb-MonoYield / ESMC-Nb-MDRatio
   ExtFig14b                 : ESMC-MonoYield (trained on de novo + DMS only) on nanobodies
-  ExtFig14d-expression/-ratio : omnilib-ml CNN / LR scores vs observed yield / ratio
+  ExtFig14d                 : omnilib-ml CNN / LR scores vs observed yield (left) and ratio (right), one figure
 
-Tables: S16a (yield), S16b (ratio), S07 (unclipped observed monomer yield for ExtFig14d-expression).
+Tables: S16a (yield, observed value clipped at -1.5), S16b (ratio, not clipped).
 """
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
@@ -23,13 +23,6 @@ dark_blues = mcolors.LinearSegmentedColormap.from_list("dark_blues", plt.get_cma
 yld = load("S16a")
 rat = load("S16b")
 print("n nanobodies:", len(yld), len(rat))
-# ExtFig14d-expression uses the unclipped observed yield (S16a's observed value is clipped at -1.5)
-s07 = load("S07")
-s07 = s07[~s07["is_spike"]].assign(key=lambda d: d["name"].str.lower())
-yld_unclipped = yld.assign(key=yld["name"].str.lower()).drop(columns="true_monomer_log_mgL").merge(
-    s07[["key", "monomer_log_mgL"]].rename(columns={"monomer_log_mgL": "true_monomer_log_mgL"}), on="key")
-
-
 def hexbin_panel(df, pred_col, true_col, title, name, ratio):
     y_pred, y_true = df[pred_col].values, df[true_col].values
     r = stats.pearsonr(y_pred, y_true)[0]
@@ -63,23 +56,27 @@ hexbin_panel(rat, "ESMC-Nb-MDRatio", "true_monomer_dimer_ratio_log", "ESMC-Nb-MD
 hexbin_panel(yld, "ESMC-MonoYield", "true_monomer_log_mgL", "ESMC-MonoYield", "ExtFig14b", False)
 
 
-def omnilib_panel(df, true_col, ylabel, name):
-    df = df.dropna(subset=["omnilib-ml CNN", "omnilib-ml LR"])
-    fig = plt.figure(figsize=(8 / 2.54, 4 / 2.54), dpi=300, tight_layout=True)
-    for i, col in enumerate(["omnilib-ml CNN", "omnilib-ml LR"], start=1):
-        r = stats.pearsonr(df[col].values, df[true_col].values)[0]
-        print(f"{name} {col}: Pearson r={r:.3f} n={len(df)}")
-        ax = fig.add_subplot(1, 2, i)
-        ax.hexbin(df[col].values, df[true_col].values, gridsize=100, mincnt=1, bins="log", cmap=dark_blues, alpha=1.0)
-        ax.text(0.05, 0.95, f"Pearson r = {r:.2f}\nn = {len(df)}", transform=ax.transAxes, va="top", fontsize=6)
-        ax.set_title(col, fontsize=6)
-        ax.set_xlabel("omnilib-ml score", fontsize=7)
-        ax.set_ylabel(ylabel, fontsize=7)
-        ax.tick_params(labelsize=6)
-        ax.tick_params(axis="both", which="major", pad=1)
+def omnilib_panel(panels, name):
+    """One figure, one row: omnilib-ml CNN / LR vs observed yield (left pair) and vs observed monomer/dimer ratio (right pair)."""
+    fig = plt.figure(figsize=(16 / 2.54, 4 / 2.54), dpi=300)
+    gs = fig.add_gridspec(1, 5, width_ratios=[1, 1, 0.05, 1, 1], left=0.07, right=0.99, bottom=0.2, top=0.88, wspace=0.45)
+    for p, (df, true_col, ylabel, kind) in enumerate(panels):
+        df = df.dropna(subset=["omnilib-ml CNN", "omnilib-ml LR"])
+        for i, col in enumerate(["omnilib-ml CNN", "omnilib-ml LR"]):
+            r = stats.pearsonr(df[col].values, df[true_col].values)[0]
+            print(f"{name}-{kind} {col}: Pearson r={r:.3f} n={len(df)}")
+            ax = fig.add_subplot(gs[0, 3 * p + i])
+            ax.hexbin(df[col].values, df[true_col].values, gridsize=100, mincnt=1, bins="log", cmap=dark_blues, alpha=1.0)
+            ax.text(0.05, 0.95, f"r = {r:.2f}\nn = {len(df)}", transform=ax.transAxes, va="top", fontsize=6)
+            ax.set_title(col, fontsize=6)
+            ax.set_xlabel("omnilib-ml score", fontsize=6, labelpad=1)
+            if i == 0:
+                ax.set_ylabel(ylabel, fontsize=6, labelpad=1)
+            ax.tick_params(labelsize=6)
+            ax.tick_params(axis="both", which="major", pad=1)
     fig.savefig(os.path.join(OUT, f"{name}.pdf"))
     plt.close(fig)
 
 
-omnilib_panel(yld_unclipped, "true_monomer_log_mgL", "Observed expression", "ExtFig14d-expression")
-omnilib_panel(rat, "true_monomer_dimer_ratio_log", "Observed monomer/dimer ratio", "ExtFig14d-ratio")
+omnilib_panel([(yld, "true_monomer_log_mgL", "Observed yield", "yield"),
+               (rat, "true_monomer_dimer_ratio_log", "Observed monomer/dimer ratio", "ratio")], "ExtFig14d")

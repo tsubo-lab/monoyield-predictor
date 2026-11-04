@@ -15,7 +15,7 @@ Sequence-based predictors of the **monomeric expression yield in *E. coli*** (lo
 | **ESMC-Nb-MonoYield** | ESMC-6B + LoRA | per-residue regression, mean-pooled (`train_esmc_lora_denovo_only_residue_mean_clip.py`) | nanobody library (monomer log10 mg/L), 5-fold | nanobody sequence | log10 monomer yield | `scripts/predict_esmc_residue.py` / `predict_nanobody_model_on_denovo.py` |
 | **ESMC-Nb-MDRatio** | ESMC-6B + LoRA | same as above | nanobody library (log10 monomer/dimer ratio) | nanobody sequence | log10 monomer/dimer ratio | same |
 
-All predictions are 5-fold ensembles (mean of the five fold checkpoints). Targets were clipped to [-1.5, 3.5] (log10 mg/L) for training.
+All predictions are 5-fold ensembles (mean of the five fold checkpoints). Yield targets (monomer log10 mg/L) were clipped to [-1.5, 3.5] for training; the monomer/dimer ratio target was not clipped.
 See `docs/models.md` for the mapping between models, checkpoints, training commands and the paper's figures.
 
 ## Installation

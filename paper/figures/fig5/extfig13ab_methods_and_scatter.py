@@ -19,8 +19,8 @@ YLABEL = {"monomer_log_mgL": "Monomer yield\n(log$_{10}$ mg/L)", "dimer_log_mgL"
 
 df = load("S07")
 df = df[~df["is_spike"]].copy()
+# yields are clipped at CLIP_LOWER; the S07 ratio (unclipped monomer - dimer) is used as is
 df[["monomer_log_mgL", "dimer_log_mgL"]] = df[["monomer_log_mgL", "dimer_log_mgL"]].clip(lower=CLIP_LOWER)
-df["monomer_dimer_ratio_log"] = df["monomer_log_mgL"] - df["dimer_log_mgL"]
 print("n nanobodies:", len(df), df["method"].value_counts().to_dict())
 
 for name, ycol in [("ExtFig13a-yield", "monomer_log_mgL"), ("ExtFig13a-ratio", "monomer_dimer_ratio_log")]:

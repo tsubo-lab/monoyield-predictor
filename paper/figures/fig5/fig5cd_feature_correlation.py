@@ -87,8 +87,8 @@ learncols = {t: list(top[(top.group == "pooled") & (top.target == t)]["represent
 y = load("S07")
 y = y[~y["is_spike"]].copy()
 y["key"] = y["name"].str.lower()
+# yields clipped at CLIP_LOWER; the S07 ratio (unclipped monomer - dimer) is used as is
 y[["monomer_log_mgL", "dimer_log_mgL"]] = y[["monomer_log_mgL", "dimer_log_mgL"]].clip(lower=CLIP_LOWER)
-y["monomer_dimer_ratio_log"] = y["monomer_log_mgL"] - y["dimer_log_mgL"]
 
 feat_cols = sorted({c for v in learncols.values() for c in v} - set(EXTRA))
 feat = pd.read_csv(path("S24"), usecols=["name"] + feat_cols)

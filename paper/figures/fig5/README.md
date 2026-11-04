@@ -14,16 +14,18 @@ Agreement = text tokens of the PDF vs the reference (`reproduced_figures/Fig5`) 
 | ExtFig13b-1 / -2 | `extfig13ab_methods_and_scatter.py` | S07 | done | identical (pixdiff 0) |
 | ExtFig13c (CDR aa frequency) | `extfig13cde_cdr_heatmaps.py` | S07, S18 | done | identical (pixdiff 0) |
 | ExtFig13d / e (median yield / ratio) | `extfig13cde_cdr_heatmaps.py` | S07, S18 | done | identical (pixdiff 0) |
-| ExtFig14a-yield / -ratio | `extfig14a_cdna_display_enrichment.py` | S19 | done | identical (pixdiff 0) |
+| ExtFig14a (2 x 2: yield top row, ratio bottom row; columns PD-L1 / PD-1) | `extfig14a_cdna_display_enrichment.py` | S19 | done | layout changed 2026-11-04 (one `ExtFig14a.pdf`, shared x/y labels); no reference |
 | ExtFig14b (ESMC-MonoYield on nanobodies) | `fig5j_extfig14bd_prediction_hexbin.py` | S16a | done | identical (pixdiff 0) |
 | ExtFig14c (positive rate vs selection) | `extfig14c_topk_precision.py` | S16a, S16b | done | identical (pixdiff 0) |
-| ExtFig14d-expression / -ratio (omnilib-ml) | `fig5j_extfig14bd_prediction_hexbin.py` | S16a, S16b, S07 | done | identical (pixdiff 0) |
+| ExtFig14d (omnilib-ml CNN / LR vs observed yield (left) and ratio (right), one 16 x 4 cm figure) | `fig5j_extfig14bd_prediction_hexbin.py` | S16a, S16b | done | layout changed 2026-11-04 (one `ExtFig14d.pdf`); no reference |
 
 ## Notes
-- Yields: S07 non-spike rows (2,590), `monomer`/`dimer` clipped at -1.5 and the ratio recomputed (as in the notebook), CDRs / method from S18 (matched by lower-case name). Fig5c/d use 2,589 nanobodies (those with features in S24).
+- Yields: S07 non-spike rows (2,590), CDRs / method from S18 (matched by lower-case name).
+- **Clipping convention (all panels)**: monomer and dimer yields are clipped at -1.5 (log10 mg/L) in the scripts; the monomer/dimer ratio is NOT clipped (S07 `monomer_dimer_ratio_log` = unclipped monomer - dimer = S16b / S19 observed ratio; S07 had the ratio of the clipped yields until 2026-11-04). Yield clipped = Fig5c/i/j-yield, ExtFig13a/b/d, 14a-yield, 14b, 14d-expression (S16a observed value); ratio unclipped = Fig5d/i/j-ratio, ExtFig13a/b/e, 14a-ratio, 14d-ratio. ExtFig14c thresholds (yield >= 0.5, ratio >= 1.0) are unaffected by clipping. This is also the LoRA training convention (yield targets clipped with `--clip_y_min -1.5`, ratio target unclipped).
+- Changed by this convention (earlier versions used the clipped-yield ratio, and unclipped 14a-yield / 14d-expression): Fig5d, Fig5i-ratio (labels 17/37, 28/44 -> 24/38, 33/44), ExtFig13a-ratio / 13b-2 / 13e, ExtFig14a-yield, ExtFig14d-expression. Their Agreement entries refer to the earlier versions; these panels now differ from `reproduced_figures/Fig5`.
 - Fig5c/d: representatives of the pooled correlation clusters (S24b, `freq_CA` relabelled `cdr3_len`) + AF3/ESMFold2 ipTM/pLDDT and ESM3dG (S08); bootstrap 1000x, seed 0, as in the notebook.
-- Fig5i: rule scores are computed from the CDR2/CDR3 sequences (S18) with the rules of the notebook (6 McMahon rules; v2 = Cpos1 Y/W + 3 additional rules). Values above boxes: 6/29, 14/33 (yield), 17/37, 28/44 (ratio).
+- Fig5i: rule scores are computed from the CDR2/CDR3 sequences (S18) with the rules of the notebook (6 McMahon rules; v2 = Cpos1 Y/W + 3 additional rules). Values above boxes: 6/29, 14/33 (yield), 24/38, 33/44 (ratio; 17/37, 28/44 with the clipped-yield ratio).
 - ExtFig13a: the notebook also draws total / supernatant / fraction boxplots; the paper panels show only monomer yield and ratio (the other fractions are not in the tables and not needed).
-- ExtFig14d-expression: the unclipped observed yield (S07) is used because S16a stores the observed value clipped at -1.5 (omnilib scores are missing for 200 sequences).
+- ExtFig14d (left, yield): the observed yield is the clipped S16a value (omnilib scores are missing for 200 sequences).
 - Key statistics (printed by the scripts): Fig5j-yield r=0.806 / R2=0.646; Fig5j-ratio r=0.853 / R2=0.728; ExtFig14b r=0.226; omnilib-ml r=0.24 / 0.27 (yield), 0.28 / 0.31 (ratio).
 - Not drawn (not in the paper panels): the notebook's extra plots (lib82 histograms/ECDFs, ESMC-MonoYield_ft hexbin).

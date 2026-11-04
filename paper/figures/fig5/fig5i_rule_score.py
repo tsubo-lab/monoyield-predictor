@@ -29,16 +29,15 @@ LABEL_SCORES = {"rule_score_v1": {5, 6}, "rule_score_v2": {8, 9}}
 
 
 def load_nanobodies():
-    """S07 yields (spikes removed, clipped, ratio recomputed) + S18 CDR sequences, matched by lower-case name."""
+    """S07 yields (spikes removed, yields clipped; ratio not clipped) + S18 CDR sequences, matched by lower-case name."""
     y = load("S07")
     y = y[~y["is_spike"]].copy()
     y["key"] = y["name"].str.lower()
     s18 = load("S18")
     s18["key"] = s18["name"].str.lower()
-    df = y[["key", "monomer_log_mgL", "dimer_log_mgL"]].merge(
+    df = y[["key", "monomer_log_mgL", "dimer_log_mgL", "monomer_dimer_ratio_log"]].merge(
         s18[["key", "aa_seq", "cdr1_seq", "cdr2_seq", "cdr3_seq", "method", "target"]], on="key")
     df[["monomer_log_mgL", "dimer_log_mgL"]] = df[["monomer_log_mgL", "dimer_log_mgL"]].clip(lower=CLIP_LOWER)
-    df["monomer_dimer_ratio_log"] = df["monomer_log_mgL"] - df["dimer_log_mgL"]
     return df
 
 
