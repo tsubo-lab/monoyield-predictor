@@ -34,7 +34,7 @@ FEATURE_NAME = {
     "avg_per_res_energy_of_site_100_neighborhood_5A": "Energy near 100 (5 Å)",
     "avg_per_res_energy_of_site_100_neighborhood_3A": "Energy near 100 (3 Å)",
     "buried_npsa_FAMILYVW_surface": "Buried nonpolar area",
-    "iptm": "AF3 iptm", "plddt": "AF3 pLDDT", "esm_iptm": "ESMfold2 iptm", "esm_plddt": "ESMfold2 pLDDT",
+    "iptm": "AF3 ipTM", "plddt": "AF3 pLDDT", "esm_iptm": "ESMFold2 ipTM", "esm_plddt": "ESMFold2 pLDDT",
     "deltaG_pred": "Absolute ΔG (ESM3ΔG predicted)",
 }
 # colours matched to the ChimeraX scheme of the structure figures

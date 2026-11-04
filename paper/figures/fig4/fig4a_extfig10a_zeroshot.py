@@ -79,9 +79,9 @@ sns.barplot(data=plot_df, x="pearsonR", y="feature2", orient="h", hue="group", p
 ax.errorbar(x=plot_df["pearsonR"].values, y=np.arange(len(plot_df)), xerr=np.vstack([plot_df["lo"], plot_df["hi"]]),
             fmt="none", ecolor="black", elinewidth=0.8, capsize=2, capthick=0.8)
 ax.axvline(0, color="black", linewidth=0.8)
-ax.set_xlabel("Pearson R"); ax.set_ylabel(""); ax.set_xlim(-0.3, 0.5)
+ax.set_xlabel("Pearson R to monomeric yield"); ax.set_ylabel(""); ax.set_xlim(-0.3, 0.7); ax.set_xticks([-0.2, 0, 0.2, 0.4])
 ax.grid(axis="x", linestyle="--", linewidth=0.5)
-ax.set_title(f"zero-shot, {Y} all")
+leg = ax.legend(loc="lower right", frameon=False, title=None, handlelength=1.0, handleheight=0.8, handletextpad=0.5, labelspacing=0.3, borderaxespad=0.2)  # legend inside, lower right, no title / frame
 ax.tick_params(axis="both", which="major", pad=1)
 plt.savefig(os.path.join(OUT, "Fig4a.pdf")); plt.close()
 

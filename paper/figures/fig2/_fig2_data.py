@@ -18,10 +18,10 @@ from common.style import set_style  # noqa: E402,F401
 
 CLIP = (-1.5, 3.5)
 METHOD_LABEL = {
-    "campnnt01": "ProteinMPNN-Ca", "cdt04": "Carbon design", "ems3t03": "ESM3", "esmif1t03": "ESM-IF1",
+    "campnnt01": "ProteinMPNN-Cα", "cdt04": "CarbonDesign", "ems3t03": "ESM3", "esmif1t03": "ESM-IF1",
     "f2seqt03": "Frame2seq", "hympnnt01": "HyperMPNN", "prmpnnt01": "ProteinMPNN-T0.1",
     "prmpnnt03": "ProteinMPNN-T0.3", "sompnnt01": "SolubleMPNN", "tdt014": "TIMED-Design",
-    "boltzift01": "Boltz-if", "wt": "Natural/Rossetta",
+    "boltzift01": "BoltzIF", "wt": "Natural/Rossetta",
 }
 # colours used throughout (from the analysis notebook)
 TSM = ("#0B5269", "#087295", "#0493C2", "#6CD8FD")

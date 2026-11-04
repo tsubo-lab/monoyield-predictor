@@ -21,7 +21,7 @@ df["monomer_log_mgL"] = df["monomer_log_mgL"].clip(lower=-1.5)  # yield clipped,
 print("n nanobodies:", len(df))
 ROWS = [("yield", "monomer_log_mgL", "log$_{10}$ (monomeric yield)\n(mg/L)"),
         ("ratio", "monomer_dimer_ratio_log", "log$_{10}$ (monomeric/dimeric yield)")]
-TITLES = {"2nd_PDL1": "Against PDL1", "2nd_PD1": "Against PD1"}
+TITLES = {"2nd_PDL1": "Against PD-L1", "2nd_PD1": "Against PD-1"}
 
 fig, axes = plt.subplots(2, 2, figsize=(6.5 / 2.54, 6.5 / 2.54), dpi=300)
 fig.subplots_adjust(left=0.2, right=0.97, top=0.92, bottom=0.14, hspace=0.8, wspace=0.3)

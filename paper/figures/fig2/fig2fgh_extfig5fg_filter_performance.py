@@ -16,15 +16,15 @@ COL = "monomer_log_mgL"
 POS_TH = 1            # log10(mg/L) > 1  -> >10 mg/L
 TM_CUT = 0.80
 PLDDT_CUTS = [60, 70, 80, 90, 95]
-HUE_ORDER = ["ProteinMPNN-T0.1", "ProteinMPNN-T0.3", "ProteinMPNN-Ca", "SolubleMPNN", "HyperMPNN", "TIMED-Design",
-             "ESM3", "ESM-IF1", "Carbon design", "Frame2seq", "Boltz-if"]
+HUE_ORDER = ["ProteinMPNN-T0.1", "ProteinMPNN-T0.3", "ProteinMPNN-Cα", "SolubleMPNN", "HyperMPNN", "TIMED-Design",
+             "ESM3", "ESM-IF1", "CarbonDesign", "Frame2seq", "BoltzIF"]
 HUE_PALETTE = dict(zip(HUE_ORDER, sns.color_palette("husl", 11)))
-METHOD_COLOR = {"Boltz-if": "#FF59CD", "ProteinMPNN-T0.3": "#F28E2B", "Carbon design": "#9A88FF", "HyperMPNN": "#16BF55",
+METHOD_COLOR = {"BoltzIF": "#FF59CD", "ProteinMPNN-T0.3": "#F28E2B", "CarbonDesign": "#9A88FF", "HyperMPNN": "#16BF55",
                 "ProteinMPNN-T0.1": "#FF7099", "ESM-IF1": "#32ABD4", "SolubleMPNN": "#86B820", "Frame2seq": "#EE62F0",
-                "ProteinMPNN-Ca": "#B59B16", "ESM3": "#00ADBE", "TIMED-Design": "#20B59E"}
-LABEL_POS = {"Boltz-if": (0.80, 0.205), "ProteinMPNN-T0.3": (1.03, 0.181), "Carbon design": (1.03, 0.163),
+                "ProteinMPNN-Cα": "#B59B16", "ESM3": "#00ADBE", "TIMED-Design": "#20B59E"}
+LABEL_POS = {"BoltzIF": (0.80, 0.205), "ProteinMPNN-T0.3": (1.03, 0.181), "CarbonDesign": (1.03, 0.163),
              "HyperMPNN": (1.03, 0.145), "ProteinMPNN-T0.1": (1.03, 0.127), "ESM-IF1": (1.03, 0.109),
-             "SolubleMPNN": (1.03, 0.091), "Frame2seq": (1.03, 0.073), "ProteinMPNN-Ca": (1.03, 0.055),
+             "SolubleMPNN": (1.03, 0.091), "Frame2seq": (1.03, 0.073), "ProteinMPNN-Cα": (1.03, 0.055),
              "ESM3": (0.55, 0.065), "TIMED-Design": (1.03, 0.026)}
 
 
@@ -143,19 +143,20 @@ for spine in ["left", "bottom"]:
     ax.spines[spine].set_linewidth(0.6)
 fig.savefig(os.path.join(OUT, "Fig2h.pdf"), bbox_inches="tight")
 
-for key, title, fname in [
-        ("target_n_positive_nofilter", "Backbones with high-yield designs\nbefore structural filtering", "ExtFig5g-1-before-filtering.pdf"),
-        ("target_n_positive", "Backbones with high-yield designs\nafter structural filtering", "ExtFig5g-2-after-AF3-filter.pdf")]:
-    fig = plt.figure(figsize=(6 / 2.54, 4 / 2.54), dpi=300, tight_layout=True)
-    ax = fig.add_subplot(1, 1, 1)
+fig, axes = plt.subplots(1, 2, figsize=(14 / 2.54, 4 / 2.54), dpi=300, gridspec_kw={"wspace": 0.75})
+for ax, (key, title) in zip(axes, [("target_n_positive_nofilter", "Before filtering"),
+                                   ("target_n_positive", "AlphaFold3 pLDDT >90 and TM-score >0.8")]):
     sns.barplot(data=mres.sort_values(key, ascending=False), x=key, y="method", hue="method", hue_order=HUE_ORDER,
                 palette=HUE_PALETTE, legend=False, alpha=0.9, ax=ax)
     ax.set_xlim(0, 70)
+    ax.set_xticks([0, 20, 40, 60])
     ax.set_ylabel("")
-    ax.set_title(title, fontsize=6, pad=1)
-    ax.set_xlabel("Number of unique backbones", fontsize=6, labelpad=1)
+    ax.set_title(title, fontsize=6, pad=3)
+    ax.set_xlabel("Number of backbones with >10 mg/L designs", fontsize=6, labelpad=1)
     ax.tick_params(axis="both", which="major", pad=1)
-    fig.savefig(os.path.join(OUT, fname), bbox_inches="tight")
+fig.subplots_adjust(left=0.17, right=0.98, bottom=0.2, top=0.88)
+fig.savefig(os.path.join(OUT, "ExtFig5g.pdf"))
+plt.close(fig)
 
 # ------------------------------------------------------------------ ExtFig 5f (AF2 pLDDT cutoffs)
 res2 = cutoff_table(load_designs("af2"))
