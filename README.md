@@ -20,12 +20,20 @@ See `docs/models.md` for the mapping between models, checkpoints, training comma
 
 ## Installation
 
-*Under verification: the installation instructions will be added here once the environment has been re-tested from a clean install.*
+**Environment used for the paper (record).** The models were trained and evaluated in a conda environment (`esmc-6000`) built as follows:
+Python 3.12, then `pip install esm@git+https://github.com/Biohub/esm.git@main` (June 2026; `esm` 3.3.0, commit `f652b471d29da828b31e9b7a9cf7d0a7803240f5`),
+which at that time pulled in Biohub's own `transformers` build (`github.com/Biohub/transformers`, commit `f9a5a374be135f63b3019c1cefb91ea9e2d27e10`, reports itself as `4.57.6`) with native ESMC support.
+PyTorch 2.12.0.dev (CUDA 12.8), `peft==0.19.1`.
+If you already have such an environment, the scripts in `scripts/` run as they are.
+**This environment cannot be rebuilt from scratch today**: the Biohub `transformers` repository is no longer publicly accessible, so the pinned install fails.
+
+**Installing now (under verification).** A user reported that `esm` 3.4.2 with PyTorch 2.11.0+cu128, `transformers==4.57.6` from PyPI and `peft==0.19.1` can run the example when the model / tokenizer loading is switched to `esm`'s `EsmcModel` / `EsmcTokenizer`
+(the `AutoTokenizer` loading used in `scripts/` fails with PyPI `transformers`). We are verifying that the predictions agree with the paper environment and will add dedicated scripts and exact instructions here.
 
 ## Weights
 
 ```bash
-HF_REPO=Tsuboyama-Lab/monoyield-predictor bash download_weights.sh weights/     # weights hosted on Hugging Face (private until publication)
+HF_REPO=Tsuboyama-Lab/monoyield-predictor bash download_weights.sh weights/     # weights hosted on Hugging Face
 ```
 Each model is a directory of five adapter-only checkpoints (LoRA + head, 7-12 MB each; the frozen base model is downloaded from Hugging Face):
 
