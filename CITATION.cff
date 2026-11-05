@@ -15,6 +15,10 @@ authors:
     given-names: Yukihide
   - family-names: Tsuboyama
     given-names: Kotaro
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.23874456"
+    description: "Zenodo archive (source data, code and tables)"
 repository-code: "https://github.com/tsubo-lab/monoyield-predictor"
 license: Apache-2.0
 preferred-citation:
@@ -33,6 +37,7 @@ preferred-citation:
       given-names: Yukihide
     - family-names: Tsuboyama
       given-names: Kotaro
+  notes: "Selena Setsu and Kaori Kiyokawa contributed equally."
   journal: "bioRxiv"
   doi: "10.64898/2026.11.02.763507"
   url: "https://www.biorxiv.org/content/10.64898/2026.11.02.763507v1"

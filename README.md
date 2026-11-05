@@ -97,9 +97,12 @@ monoyield-predictor/
 
 If you use this code, data or the trained weights, please cite the preprint:
 
-> Setsu S, Kiyokawa K, Lam AYW, Mishiro-Sato E, Tomari Y, Tsuboyama K.
+> Setsu S*, Kiyokawa K*, Lam AYW, Mishiro-Sato E, Tomari Y, Tsuboyama K.
 > Massively parallel quantification and prediction of monomeric protein yield in *Escherichia coli*.
 > *bioRxiv* (2026). https://doi.org/10.64898/2026.11.02.763507
+> \*These authors contributed equally.
+
+Source data, tables and code are archived on Zenodo: https://doi.org/10.5281/zenodo.23874456
 
 GitHub's "Cite this repository" button reads `CITATION.cff`.
 
