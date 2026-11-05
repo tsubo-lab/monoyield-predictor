@@ -25,7 +25,8 @@ sns.stripplot(data=df, x=target_col, y=col, hue="ss_group", order=order, hue_ord
 x = np.arange(len(order))
 ax.hlines(medians.to_numpy(), x - 0.32, x + 0.32, color="black", linewidth=0.65, zorder=5, alpha=0.5)
 ax.set_xticks(x)
-ax.set_xticklabels(order, rotation=90, ha="center", va="top")
+LABEL_FIX = {"Cold-shock dna binding": "Cold-shock DNA binding", "anti-CRISPR AcrIF7": "Anti-CRISPR AcrIF7"}   # match Fig 2a
+ax.set_xticklabels([LABEL_FIX.get(o, o) for o in order], rotation=90, ha="center", va="top", fontsize=5.5)
 ax.set_xlabel("")
 ax.set_ylabel(r"log$_{10}$(monomeric yield)" + "(mg/L)", labelpad=0)
 ax.set_ylim(-1.7, 2.05)

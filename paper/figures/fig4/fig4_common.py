@@ -21,10 +21,12 @@ bc_, gc_, pc_ = _cm(BLUE_SHADES), _cm(GREEN_SHADES), _cm(PURPLE_SHADES)
 dark = lambda shades: mcolors.LinearSegmentedColormap.from_list("d", _cm(shades)(np.linspace(0, 1.0, 256)))
 dark_blues, dark_greens, dark_purples, dark_reds = (dark(s) for s in (BLUE_SHADES, GREEN_SHADES, PURPLE_SHADES, RED_SHADES))
 
-TOOLS = ['Camsol', 'DeepSoluE', 'MPEPE', 'NetSolP', 'RP3net', 'SKADE', 'SoluProt', 'AGGRESCAN3D', 'GATsol']
+TOOLS = ['CamSol', 'DeepSoluE', 'MPEPE', 'NetSolP', 'RP3Net', 'SKADE', 'SoluProt', 'AGGRESCAN3D', 'GATSol']
+# table column -> paper label (tool names as in the main text)
+TOOL_RENAME = {'Camsol': 'CamSol', 'RP3net': 'RP3Net', 'GATsol': 'GATSol', 'Aggrescan3D': 'AGGRESCAN3D', 'ESMC 6B(XGBoost)': 'ESMC 6B (XGBoost)'}
 # notebook key -> S15 column (paper label)
 XGB = {'feature': 'Features (XGBoost)', 'saprot_structure': 'SaProt 1.3B (XGBoost)', 'esm2': 'ESM2 3B (XGBoost)',
-       'esm3': 'ESMC 6B(XGBoost)', 'saprot_structure_f': 'SaProt 1.3B + features (XGBoost)',
+       'esm3': 'ESMC 6B (XGBoost)', 'saprot_structure_f': 'SaProt 1.3B + features (XGBoost)',
        'esm2_f': 'ESM2 3B + features (XGBoost)', 'esm3_f': 'ESMC 6B + features (XGBoost)',
        'feature_d': 'Features + ΔG (XGBoost)', 'saprot_structure_d': 'SaProt 1.3B + ΔG (XGBoost)',
        'esm2_d': 'ESM2 3B + ΔG (XGBoost)', 'esm3_d': 'ESMC 6B + ΔG (XGBoost)'}
@@ -63,8 +65,8 @@ def set_style_pred():
 
 def load_pred():
     """S15a / S15b with the true-value column renamed to y_true / y_delta_true; returns (all rows, denovo rows, mutational effect)."""
-    a = load("S15a").rename(columns={"true_monomer_log_mgL": "y_true", "Aggrescan3D": "AGGRESCAN3D"})
-    b = load("S15b").rename(columns={"true_delta_monomer_log_mgL": "y_delta_true", "Aggrescan3D": "AGGRESCAN3D"})
+    a = load("S15a").rename(columns={"true_monomer_log_mgL": "y_true", **TOOL_RENAME})
+    b = load("S15b").rename(columns={"true_delta_monomer_log_mgL": "y_delta_true", **TOOL_RENAME})
     return a, a[a["data_type"] == "denovo"], b
 
 def condition_data(model, dt, a, den, b):

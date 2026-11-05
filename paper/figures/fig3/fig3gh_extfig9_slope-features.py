@@ -18,7 +18,7 @@ OUT = outdir("fig3")
 P_MAX = 0.01                      # features shown: p < 0.01 of the regression feature -> slope
 N_TOP = 20                        # features that get a bootstrap CI
 N_BOOT = 1000
-HIGHLIGHT = ["1pga", "2lgw", "6m3n", "1uzc", "1r69", "2kcm", "1aoy"]
+HIGHLIGHT = ["1pga", "2lgw", "6m3n", "1uzc", "1r69", "2kcm", "1aoy", "3l1x", "2btt"]   # the 9 proteins with a full DMS (Fig3a)
 FEATURE_LABEL = {
     "buried_np": "Buried nonpolar area\n(all residues)",
     "buried_npsa": "Buried nonpolar area\n(all residues)",
@@ -107,9 +107,13 @@ fig = plt.figure(figsize=(4 / 2.54, 4 / 2.54), dpi=300, tight_layout=True)
 ax = fig.add_subplot(1, 1, 1)
 sns.scatterplot(data=df_m, x="hydrophobicity", y="slope", alpha=0.7, s=6, ax=ax)
 sns.scatterplot(data=targets, x="hydrophobicity", y="slope", alpha=1, s=10, ax=ax)
+LABEL_OFFSET = {"1uzc": (-1, 1, "right", "bottom"), "2lgw": (1, -1, "left", "top")}   # keep neighbouring labels apart
 for _, row in targets.iterrows():
-    ax.annotate(text=row["name"].upper(), xy=(row["hydrophobicity"], row["slope"]), xytext=(1, 1),
-                textcoords="offset points", fontsize=6, ha="left", va="bottom")
+    dx, dy, ha, va = LABEL_OFFSET.get(row["name"], (1, 1, "left", "bottom"))
+    ax.annotate(text=row["name"].upper(), xy=(row["hydrophobicity"], row["slope"]), xytext=(dx, dy),
+                textcoords="offset points", fontsize=6, ha=ha, va=va)
+ax.set_xlabel("Hydrophobicity", labelpad=1)
+ax.set_ylabel("Slope", labelpad=1)
 ax.tick_params(axis="both", which="major", pad=1)
 fig.savefig(os.path.join(OUT, "Fig3h.pdf"), bbox_inches="tight")
 
