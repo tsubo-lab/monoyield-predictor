@@ -20,26 +20,7 @@ See `docs/models.md` for the mapping between models, checkpoints, training comma
 
 ## Installation
 
-```bash
-conda create -n monoyield python=3.12 -y && conda activate monoyield
-# install PyTorch for your CUDA version first, e.g. (Blackwell, CUDA 12.8):
-pip install torch --index-url https://download.pytorch.org/whl/cu128
-pip install -e .          # Biohub transformers fork (pinned commit, see below), peft==0.19.1, ...
-```
-
-* **Transformers: use the Biohub fork, not PyPI.** `pip install -e .` installs `transformers` from `github.com/Biohub/transformers` at commit
-  `f9a5a374be135f63b3019c1cefb91ea9e2d27e10` (it reports itself as `4.57.6`, the version the models were trained with). It contains the native ESMC model and tokenizer
-  that the ESMC-6B revision below relies on. Plain `transformers==4.57.6` from PyPI has no `ESMCTokenizer` (`ValueError: Tokenizer class ESMCTokenizer does not exist or is not currently imported` in `AutoTokenizer.from_pretrained`),
-  and Transformers 5.x names the ESMC parameters differently (`self_attn.o_proj` vs `attn.out_proj`), so the released LoRA checkpoints do not load. Check with:
-  `python -c "import transformers; print(transformers.ESMCTokenizer)"`.
-  Tested combination: this fork, `peft==0.19.1`, `torch` 2.12 dev (cu128), Python 3.12, ESMC-6B revision `45b0fa5d...`.
-* **Alternative without the fork (not verified against the paper numbers).** The Biohub `esm` package (3.4.x) provides `EsmcModel.from_pretrained` and `EsmcTokenizer`;
-  one user reported that substituting these for `AutoModel` / `AutoTokenizer` makes the LoRA keys match and the example CSV run to the end. Compare the predictions with the fork's before relying on it.
-* **GPU memory.** ESMC-6B in fp32 needs ~25 GB (48 GB-class card, e.g. RTX 6000 Pro). `--dtype bfloat16` (available in all prediction scripts) halves this
-  (fits a 24 GB card). The numbers in the paper were produced in float32. A correlation of > 0.99 between bfloat16 and float32 predictions was confirmed (Pearson r = 0.9998 for the 5-fold ensemble, >= 0.999 for each fold, on 226 coronavirus binder designs with an ESMC-6B LoRA model; r > 0.999 also on the example sequences of each released model).
-* **Pin the Hugging Face revision.** The `main` revision of `biohub/ESMC-6B` / `ESMC-600M` changed after the models were trained and can break loading.
-  Use the training revisions: ESMC-6B `45b0fa5d7fb06faefbd5e3b89bdcef35d564e79a`, ESMC-600M: the revision recorded with the training run (pass `--model_revision`; the full hash still has to be copied here).
-* If the model repository is gated, `export HF_TOKEN=...` (the scripts call `huggingface_hub.login`).
+*Under verification: the installation instructions will be added here once the environment has been re-tested from a clean install.*
 
 ## Weights
 
@@ -111,8 +92,6 @@ If you use this code, data or the trained weights, please cite the preprint:
 > \*These authors contributed equally.
 
 Source data, tables and code are archived on Zenodo: https://doi.org/10.5281/zenodo.23874456
-
-GitHub's "Cite this repository" button reads `CITATION.cff`.
 
 ## License
 
