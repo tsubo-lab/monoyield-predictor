@@ -1,7 +1,7 @@
 # monoyield-predictor
 
 Sequence-based predictors of the **monomeric expression yield in *E. coli*** (log10 mg/L) used in
-*[paper title - to be filled]*. LoRA-fine-tuned protein language models trained on the pooled-barcode MS yield assay
+*Massively parallel quantification and prediction of monomeric protein yield in Escherichia coli* ([bioRxiv preprint](https://www.biorxiv.org/content/10.64898/2026.11.02.763507v1)). LoRA-fine-tuned protein language models trained on the pooled-barcode MS yield assay
 (~35,000 de novo / DMS designs; nanobody library of 2,600 sequences).
 
 > **Status (draft):** code, data, example inputs and documentation are in place. The trained weights (adapter-only, about 190 MB) are hosted on Hugging Face (`Tsuboyama-Lab/monoyield-predictor`; see "Weights"). Scripts are the ones used for the paper; they have not been refactored into a package.
@@ -95,7 +95,13 @@ monoyield-predictor/
 
 ## Citation
 
-*[to be filled]*
+If you use this code, data or the trained weights, please cite the preprint:
+
+> Setsu S, Kiyokawa K, Lam AYW, Mishiro-Sato E, Tomari Y, Tsuboyama K.
+> Massively parallel quantification and prediction of monomeric protein yield in *Escherichia coli*.
+> *bioRxiv* (2026). https://doi.org/10.64898/2026.11.02.763507
+
+GitHub's "Cite this repository" button reads `CITATION.cff`.
 
 ## License
 

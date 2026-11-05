@@ -39,7 +39,7 @@ for key, tab, name in [("mut", mean_by_mut, "target"), ("ori", mean_by_ori, "sou
     ax.axvline(x=0, lw=0.5, c="grey", ls="--")
     ax.set_title("mean Δ(mutant-WTs)")
     ax.set_xlabel("ΔΔG (kcal/mol)", labelpad=1)
-    ax.set_ylabel(r"Δlog$_{10}$ (monomeric yield) (mg/L)", labelpad=1)
+    ax.set_ylabel(r"Δlog$_{10}$(monomeric yield)", labelpad=1)
     ax.tick_params(axis="both", which="major", pad=1)
     r = stats.pearsonr(tab["delta_deltaG"], tab["delta_monomer_log_mgL"])[0]
     print(f"Fig3c-{name}: {len(tab)} groups, Pearson r (mean ddG vs mean dyield) = {r:.3f}")

@@ -1,5 +1,5 @@
 """Fig4h/i (HPLC yield of SARS-CoV-2 binders: random vs top ESMC-MonoYield picks, and HPLC vs predicted yield),
-ExtFig12b (baseline-corrected HPLC chromatograms, random vs top) and ExtFig12c (HPLC yield vs SaProt / Aggrescan3D / NetSolP predictions).
+ExtFig12b (baseline-corrected HPLC chromatograms, random vs top) and ExtFig12c (HPLC yield vs SaProt / AGGRESCAN3D / NetSolP predictions).
 
 Tables: S14d (HPLC yield, head-B selection labels, predictions), hplc('cov_binder') (raw chromatograms; sample = binder name).
 The 21 constructs of the final analysis are the rows with in_fig4h_fig4i == True (2 originally top-selected constructs excluded).
@@ -18,7 +18,7 @@ OUT = outdir("fig4")
 PAL = {"random": "tab:blue", "top": "tab:orange"}
 ORDER = ["random", "top"]
 
-d = load("S14d")
+d = load("S14d").rename(columns={"Aggrescan3D": "AGGRESCAN3D"})
 pool = d[d["in_fig4h_fig4i"]].rename(columns={
     "selection_fig4h": "selection_new", "hplc_est_yield_mgL": "est_amount", "hplc_log10_yield_mgL": "log_est_amount",
     "predicted_monomer_log10_mgL(ESMC-MonoYield)": "pred_monomer_log_mgL",
@@ -76,11 +76,11 @@ plt.savefig(os.path.join(OUT, "Fig4hi.pdf"), bbox_inches="tight")
 plt.close(fig)
 
 # ---------------- ExtFig12c ----------------
-# Aggrescan3D is stored sign-flipped in S14d (higher = better); the panel shows the raw average aggregation score (axis inverted)
-pool["aggrescan3d_raw"] = -pool["Aggrescan3D"]
+# AGGRESCAN3D is stored sign-flipped in S14d (higher = better); the panel shows the raw average aggregation score (axis inverted)
+pool["aggrescan3d_raw"] = -pool["AGGRESCAN3D"]
 fig, axes = plt.subplots(1, 3, sharey=True, figsize=(8 / 2.54, 3.5 / 2.54), dpi=300)
 panels = [("SaProt", "predSaProt", "tab:purple", "Predicted log$_{10}$ yield"),
-          ("Aggrescan3D", "aggrescan3d_raw", "#83c8aa", "Average aggregation score"),
+          ("AGGRESCAN3D", "aggrescan3d_raw", "#83c8aa", "Average aggregation score"),
           ("NetSolP", "NetSolP", "#4C9F70", "Predicted solubility")]
 for ax, (tool, col, color, xlabel) in zip(axes, panels):
     r, p = pearsonr(pool[col], pool["log_est_amount"])

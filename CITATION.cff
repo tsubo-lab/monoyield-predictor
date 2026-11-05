@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the preprint below."
+title: "monoyield-predictor"
+type: software
+authors:
+  - family-names: Setsu
+    given-names: Selena
+  - family-names: Kiyokawa
+    given-names: Kaori
+  - family-names: Lam
+    given-names: Andy Y. W.
+  - family-names: Mishiro-Sato
+    given-names: Emi
+  - family-names: Tomari
+    given-names: Yukihide
+  - family-names: Tsuboyama
+    given-names: Kotaro
+repository-code: "https://github.com/tsubo-lab/monoyield-predictor"
+license: Apache-2.0
+preferred-citation:
+  type: article
+  title: "Massively parallel quantification and prediction of monomeric protein yield in Escherichia coli"
+  authors:
+    - family-names: Setsu
+      given-names: Selena
+    - family-names: Kiyokawa
+      given-names: Kaori
+    - family-names: Lam
+      given-names: Andy Y. W.
+    - family-names: Mishiro-Sato
+      given-names: Emi
+    - family-names: Tomari
+      given-names: Yukihide
+    - family-names: Tsuboyama
+      given-names: Kotaro
+  journal: "bioRxiv"
+  doi: "10.64898/2026.11.02.763507"
+  url: "https://www.biorxiv.org/content/10.64898/2026.11.02.763507v1"
+  date-released: 2026-11-04
+  year: 2026

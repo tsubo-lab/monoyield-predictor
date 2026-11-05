@@ -22,7 +22,7 @@ YLABEL = {"monomer_log_mgL": "Monomer yield\n(log$_{10}$ mg/L)",
           "monomer_dimer_ratio_log": "Monomer / Dimer\n(log$_{10}$ ratio)"}
 
 FEATURE_NAME = {
-    "cdr3_len": "CDR3 length", "total_score": "Rosetta total score",
+    "cdr3_len": "CDR3 length", "total_score": "Total score",
     "buried_minus_exposed": "Buried − exposed\nhydrophobic surface",
     "energy_per_residue_site_101": "Energy at site 101", "fa_atr": "Attractive energy",
     "cdr3_Npos2_is_L": "CDR3 N2 = Leu", "cdr3_Npos1_is_G": "CDR3 N1 = Gly",
@@ -123,36 +123,37 @@ for t, res in results.items():
     print(t); print(res[["feature", "pearsonR", "ci_low", "ci_high"]].to_string(index=False))
 
 
-def draw(plot_df, t, pos=None):
-    fig = plt.figure(figsize=(6 / 2.54, 4 / 2.54), dpi=300, tight_layout=(pos is None))
-    ax = fig.add_subplot(1, 1, 1)
+def is_rosetta(f):
+    """Rosetta-based structural scores (marked with * in the figure): not a CDR sequence feature, frequency, AF3 / ESMFold2 or ESM3dG score."""
+    return not (f.startswith("cdr") or f.startswith("freq_") or f in EXTRA)
+
+
+def draw_panel(ax, plot_df, t):
     sns.barplot(data=plot_df, x="pearsonR", y="feature", orient="h",
                 palette=[feature_color(f) for f in plot_df["feature"]], hue="feature", legend=False, ax=ax)
     ax.errorbar(plot_df["pearsonR"].values, np.arange(len(plot_df)),
                 xerr=np.vstack([plot_df["err_low"].values, plot_df["err_high"].values]),
                 fmt="none", ecolor="black", elinewidth=0.8, capsize=2, capthick=0.8)
-    labels = [FEATURE_NAME.get(l.get_text(), l.get_text()) for l in ax.get_yticklabels()]
+    labels = [("*" if is_rosetta(l.get_text()) else "") + FEATURE_NAME.get(l.get_text(), l.get_text()) for l in ax.get_yticklabels()]
     ax.set_yticks(ax.get_yticks())
     ax.set_yticklabels(labels, linespacing=0.8)
     ax.axvline(0, color="black", linewidth=0.8)
-    ax.set_xlabel("Pearson R")
+    ax.set_xlabel("Pearson R", labelpad=1)
     ax.set_ylabel("")
     ax.grid(axis="x", linestyle="--", linewidth=0.5)
-    ax.set_title(YLABEL[t].split("\n")[0])
+    ax.set_title(YLABEL[t].split("\n")[0], pad=3)
+    ax.xaxis.set_major_locator(plt.MultipleLocator(0.2))
     ax.tick_params(axis="both", which="major", pad=1)
-    if pos is not None:
-        ax.set_position(pos)
-    return fig, ax
 
 
-# pass 1: measure each panel's axes box; pass 2: redraw both panels with the shared (most constrained) box
-positions = {}
-for t, p in plot_dfs.items():
-    fig, ax = draw(p, t)
-    fig.canvas.draw()
-    positions[t] = ax.get_position()
-    plt.close(fig)
-common_pos = max(positions.values(), key=lambda b: b.x0)
-for name, t in TARGETS.items():
-    fig, _ = draw(plot_dfs[t], t, pos=common_pos)
-    fig.savefig(os.path.join(OUT, f"{name}.pdf"))
+fig, axes = plt.subplots(1, 2, figsize=(16 / 2.54, 4.5 / 2.54), dpi=300)
+for ax, (name, t) in zip(axes, TARGETS.items()):
+    draw_panel(ax, plot_dfs[t], t)
+axes[0].set_position([0.22, 0.2, 0.25, 0.68])
+axes[1].set_position([0.70, 0.2, 0.25, 0.68])
+fig.canvas.draw()
+for ax in axes:   # footnote at the height of the "Pearson R" label
+    bb = ax.xaxis.label.get_window_extent().transformed(ax.transAxes.inverted())
+    ax.text(-0.02, (bb.y0 + bb.y1) / 2, "*Rosetta based scores", transform=ax.transAxes, ha="right", va="center", fontsize=6)
+fig.savefig(os.path.join(OUT, "Fig5cd.pdf"))
+plt.close(fig)

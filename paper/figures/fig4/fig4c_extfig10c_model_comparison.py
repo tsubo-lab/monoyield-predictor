@@ -19,7 +19,7 @@ for key, col in NB_KEY.items():
         if len(yp) < 2 or np.abs(yp).sum() == 0: continue
         records.append(dict(model=key, data_type=dt, n=len(yp), r=stats.pearsonr(yp, yt)[0], rho=stats.spearmanr(yp, yt)[0]))
 stat = pd.DataFrame(records)
-print(stat[stat.model.isin(['ESMC 6B', 'Saprot 1.3B', 'Aggrescan3D', 'esm3_d'])].round(3).to_string(index=False))
+print(stat[stat.model.isin(['ESMC 6B', 'Saprot 1.3B', 'AGGRESCAN3D', 'esm3_d'])].round(3).to_string(index=False))
 
 # ---- layout (groups, order, labels, colours) ----
 COMPARISON_GROUPS = [

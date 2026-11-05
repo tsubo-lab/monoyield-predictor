@@ -7,7 +7,7 @@ Run `python paper/figures/fig4/<script>.py` (any directory); PDFs are written to
 | Fig4a, ExtFig10a | `fig4a_extfig10a_zeroshot.py` | S04, S05, S05_feature_list, S25 | `Fig4a.pdf`, `ExtFig10a.pdf` | done (pixel diff 0) |
 | Fig4b, Fig4g | - | - | - | out of scope (schematic / rendered structure) |
 | Fig4c, ExtFig10c | `fig4c_extfig10c_model_comparison.py` | S15a, S15b | `Fig4c.pdf`, `ExtFig10c.pdf` | done (pixel diff 0) |
-| Fig4d, Fig4e | `fig4de_extfig11_hexbin.py` | S15a | `Fig4d_{ESMC-MonoYield,SaProt-LoRA,Aggrescan3D}.pdf`, `Fig4e_{ESMC-MonoYield,SaProt-LoRA}.pdf` | done (pixel diff 0) |
+| Fig4d, Fig4e | `fig4de_extfig11_hexbin.py` | S15a | `Fig4d_{ESMC-MonoYield,SaProt-LoRA,AGGRESCAN3D}.pdf`, `Fig4e_{ESMC-MonoYield,SaProt-LoRA}.pdf` | done (pixel diff 0) |
 | ExtFig11A-C | `fig4de_extfig11_hexbin.py` | S15a, S15b | `ExtFig11A.pdf`, `ExtFig11B.pdf`, `ExtFig11C.pdf` | done (pixel diff 0) |
 | Fig4f | `fig4f_extfig12ad_topk.py` | S15a | `Fig4f.pdf` | done (pixel diff 0.2 %, rounding) |
 | ExtFig12a | `fig4f_extfig12ad_topk.py` | S15a | `ExtFig12a.pdf` | done (pixel diff 0) |
@@ -23,4 +23,4 @@ Run `python paper/figures/fig4/<script>.py` (any directory); PDFs are written to
 2. Fig4c / ExtFig10c show point estimates only (no bootstrap CI in the original notebook cells); bootstrap CIs exist only for the Fig4a feature bars (1000 resamples, seed 0, as in the notebook).
 3. The zero-shot ranking and the hexbins use the `sup`-free monomer yield only (the sup/total yields are not in the tables, and are not part of the paper panels).
 4. ExtFig10b reproduces the original filter `~name.str.contains('.pdb')` (regex), which removes 991 dms-5 rows.
-5. Fig4h/i, ExtFig12b/c use the final head-B labels (`selection_fig4h`, `in_fig4h_fig4i`) of S14d; Aggrescan3D is stored sign-flipped in S14d and S15a, so the raw score of ExtFig12c is -S14d value.
+5. Fig4h/i, ExtFig12b/c use the final head-B labels (`selection_fig4h`, `in_fig4h_fig4i`) of S14d; AGGRESCAN3D (column `Aggrescan3D` in the tables) is stored sign-flipped in S14d and S15a, so the raw score of ExtFig12c is -S14d value.

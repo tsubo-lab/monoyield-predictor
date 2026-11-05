@@ -20,4 +20,4 @@ ESMC-MonoYield, ESMC-Nb-MonoYield and ESMC-Nb-MDRatio give identical values (max
 ## Open items before publication
 - Deposit the exported weights (Hugging Face / Zenodo) and fill `download_weights.sh`.
 - Optionally provide a single `monoyield.predict(seqs)` interface.
-- Fill the license holder, citation, and paper title.
+- Done (2026-11-05): citation and paper title filled (bioRxiv preprint, `CITATION.cff`, README); the license holder is stated in `LICENSE` / `NOTICE`.

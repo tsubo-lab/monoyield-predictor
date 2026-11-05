@@ -1,4 +1,4 @@
-"""Fig4d (hexbin, all data: ESMC-MonoYield, SaProt LoRA, Aggrescan3D), Fig4e (de novo: ESMC-MonoYield, SaProt LoRA)
+"""Fig4d (hexbin, all data: ESMC-MonoYield, SaProt LoRA, AGGRESCAN3D), Fig4e (de novo: ESMC-MonoYield, SaProt LoRA)
 and ExtFig11A-C (hexbin grids of all models and solubility tools; all data / de novo / mutational effect).
 
 Tables: S15a, S15b.
@@ -10,7 +10,7 @@ from fig4_common import *
 set_style_pred()
 OUT = outdir("fig4")
 a, den, b = load_pred()
-SINGLE = {'ESMC 6B': 'ESMC-MonoYield', 'Saprot 1.3B': 'SaProt-LoRA', 'Aggrescan3D': 'Aggrescan3D'}
+SINGLE = {'ESMC 6B': 'ESMC-MonoYield', 'Saprot 1.3B': 'SaProt-LoRA', 'AGGRESCAN3D': 'AGGRESCAN3D'}
 
 def single(model, dt, fname):
     fig = plt.figure(figsize=(3.5 / 2.54, 3.5 / 2.54), dpi=300, tight_layout=True)

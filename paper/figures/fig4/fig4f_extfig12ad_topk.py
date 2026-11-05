@@ -13,7 +13,7 @@ set_style_pred()
 OUT = outdir("fig4")
 a, den, b = load_pred()
 FRACS = (0.01, 0.05, 0.10, 0.15, 0.20)
-PLOT_MODELS = ['ESMC 6B', 'Saprot 1.3B', 'esm3_d', 'Aggrescan3D', 'NetSolP']      # notebook filter '1.3B|6B|esm3_d|Aggrescan|NetSol'
+PLOT_MODELS = ['ESMC 6B', 'Saprot 1.3B', 'esm3_d', 'AGGRESCAN3D', 'NetSolP']      # notebook filter '1.3B|6B|esm3_d|Aggrescan|NetSol'
 ALL_MODELS = list(LORA) + KEYS + TOOLS                                              # models of the precision table
 LABEL = lambda m: MODEL_LABEL.get(m, m)
 COLOR = lambda m: GROUP_PALETTE[classify_group(m)]
@@ -82,9 +82,9 @@ positive_rate_panel(prec, prec['base'].mean(), 'Positive rate after selection\n(
                     'Mutational effect\n(fold change ≥ 5x vs WT)', 'ExtFig12d_left.pdf', ymax, -ymax * 0.015)
 
 # ---- ECDF of observed values among the top-k predictions (ExtFig12a, ExtFig12d right) ----
-ECDF_MODELS, PCTS = ['ESMC 6B', 'Saprot 1.3B', 'Aggrescan3D', 'NetSolP'], [1, 5, 10]
+ECDF_MODELS, PCTS = ['ESMC 6B', 'Saprot 1.3B', 'AGGRESCAN3D', 'NetSolP'], [1, 5, 10]
 colors = {m: COLOR(m) for m in ECDF_MODELS}
-if colors['NetSolP'] == colors['Aggrescan3D']: colors['NetSolP'] = '#4C9F70'
+if colors['NetSolP'] == colors['AGGRESCAN3D']: colors['NetSolP'] = '#4C9F70'
 
 def ecdf_figure(dt, name):
     d_all = model_frame('ESMC 6B', dt)
