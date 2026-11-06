@@ -27,8 +27,15 @@ PyTorch 2.12.0.dev (CUDA 12.8), `peft==0.19.1`.
 If you already have such an environment, the scripts in `scripts/` run as they are.
 **This environment cannot be rebuilt from scratch today**: the Biohub `transformers` repository is no longer publicly accessible, so the pinned install fails.
 
-**Installing now (under verification).** A user reported that `esm` 3.4.2 with PyTorch 2.11.0+cu128, `transformers==4.57.6` from PyPI and `peft==0.19.1` can run the example when the model / tokenizer loading is switched to `esm`'s `EsmcModel` / `EsmcTokenizer`
-(the `AutoTokenizer` loading used in `scripts/` fails with PyPI `transformers`). We are verifying that the predictions agree with the paper environment and will add dedicated scripts and exact instructions here.
+**New installation.** Use the scripts in `scripts_esm34/` (see Quick start):
+
+```bash
+conda create -n monoyield python=3.12 -y && conda activate monoyield
+pip install "esm==3.4.2" "peft==0.19.1" pandas scipy scikit-learn     # also installs torch 2.11 and transformers 4.57
+```
+
+If your GPU driver does not support CUDA 13 (the default torch 2.11 wheel), install torch first from a matching index, e.g.
+`pip install "torch==2.11.0" --index-url https://download.pytorch.org/whl/cu128`.
 
 ## Weights
 
@@ -63,6 +70,8 @@ python scripts/predict_esmc_mlp_head.py \
 # nanobodies (sequence column is `seq`)
 python scripts/predict_esmc_mlp_head.py --external_csv examples/example_nanobody.csv --seq_col seq ...
 ```
+The commands above are for the paper environment. In an environment made with `esm==3.4.2` (see Installation) run the same commands with
+`scripts_esm34/predict_esmc_mlp_head.py` / `scripts_esm34/predict_esmc_residue.py` instead of `scripts/...` (same arguments, same output).
 `examples/` contains five de novo designs and five nanobodies with their observed values.
 SaProt needs a structure-derived sequence (AA + 3Di) in the `saprot_seq` column:
 `scripts/prepare_saprot_structure_seqs.py` builds it from AF3/PDB structures (requires Foldseek).
