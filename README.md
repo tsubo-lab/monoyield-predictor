@@ -56,9 +56,11 @@ weights/
 
 ## Quick start
 
+Commands are run from the repository root in the environment made in Installation (`esm==3.4.2`).
+
 ```bash
 # ESMC-MonoYield on the example sequences (columns: name, aa_seq)
-python scripts/predict_esmc_mlp_head.py \
+python scripts_esm34/predict_esmc_mlp_head.py \
     --external_csv examples/example_main_library.csv \
     --model_dir weights/esmc_monoyield \
     --model_name biohub/ESMC-6B --model_revision 45b0fa5d7fb06faefbd5e3b89bdcef35d564e79a \
@@ -68,13 +70,13 @@ python scripts/predict_esmc_mlp_head.py \
 # -> columns: pred_group_1..5, pred_mean, ... (+ metrics if --y_col is given)
 
 # nanobodies (sequence column is `seq`)
-python scripts/predict_esmc_mlp_head.py --external_csv examples/example_nanobody.csv --seq_col seq ...
+python scripts_esm34/predict_esmc_mlp_head.py --external_csv examples/example_nanobody.csv --seq_col seq ...
 ```
-The commands above are for the paper environment. In an environment made with `esm==3.4.2` (see Installation) run the same commands with
-`scripts_esm34/predict_esmc_mlp_head.py` / `scripts_esm34/predict_esmc_residue.py` instead of `scripts/...` (same arguments, same output).
+In the paper environment, use `scripts/predict_esmc_mlp_head.py` / `scripts/predict_esmc_residue.py` instead (same arguments, same output).
 `examples/` contains five de novo designs and five nanobodies with their observed values.
 SaProt needs a structure-derived sequence (AA + 3Di) in the `saprot_seq` column:
 `scripts/prepare_saprot_structure_seqs.py` builds it from AF3/PDB structures (requires Foldseek).
+`scripts/predict_saprot_mlp_head.py` runs as it is in both environments.
 
 ## Training / reproducing the paper
 
