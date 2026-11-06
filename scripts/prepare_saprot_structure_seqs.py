@@ -10,6 +10,8 @@ aa_seq in the CSV, fall back to the structure-unknown token (#).
 Prerequisite: create the foldseek fasta files beforehand with:
   foldseek createdb <denovo_pdb_dir> structDB_denovo
   foldseek createdb <dms_pdb_dir> structDB_dms
+  foldseek lndb structDB_denovo_h structDB_denovo_ss_h   # the _ss database needs a header database
+  foldseek lndb structDB_dms_h structDB_dms_ss_h
   foldseek convert2fasta structDB_denovo structDB_denovo.fasta
   foldseek convert2fasta structDB_denovo_ss structDB_denovo_ss.fasta
   foldseek convert2fasta structDB_dms structDB_dms.fasta
